@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Cron that process sync general document write user permission -->
+        <!--<record id="ir_cron_mass_sync_user_permission_queue" model="ir.cron">-->
+            <!--<field name="name">1. Document Permission: Process queue</field>-->
+            <!--<field name="model_id" ref="model_document_permission"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">model._process_sync_user_permission_queue(100)</field>-->
+            <!--<field name="user_id" ref="base.user_root"/>-->
+            <!--<field name="interval_number">1</field>-->
+            <!--<field name="interval_type">minutes</field>-->
+            <!--<field name="numbercall">-1</field>-->
+            <!--<field eval="False" name="doall"/>-->
+        <!--</record>-->
+        <!--<record id="ir_cron_mass_sync_user_permission_queue_quotation" model="ir.cron">-->
+            <!--<field name="name">1. Document Permission: Process queue quotation</field>-->
+            <!--<field name="model_id" ref="model_document_permission"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">model._process_sync_user_permission_queue_quotation(100)</field>-->
+            <!--<field name="user_id" ref="base.user_root"/>-->
+            <!--<field name="interval_number">1</field>-->
+            <!--<field name="interval_type">minutes</field>-->
+            <!--<field name="numbercall">-1</field>-->
+            <!--<field eval="False" name="doall"/>-->
+        <!--</record>-->
+        <!--<record id="ir_cron_mass_sync_user_permission_queue_project" model="ir.cron">-->
+            <!--<field name="name">1. Document Permission: Process queue project</field>-->
+            <!--<field name="model_id" ref="model_document_permission"/>-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">model._process_sync_user_permission_queue_project(100)</field>-->
+            <!--<field name="user_id" ref="base.user_root"/>-->
+            <!--<field name="interval_number">1</field>-->
+            <!--<field name="interval_type">minutes</field>-->
+            <!--<field name="numbercall">-1</field>-->
+            <!--<field eval="False" name="doall"/>-->
+        <!--</record>-->
+        <!--Cron process update document file permission to google drive-->
+        <record id="ir_cron_mass_sync_document_file_read_permission_queue" model="ir.cron">
+            <field name="name">#1. Document File Permission: Read : Process queue</field>
+            <field name="model_id" ref="model_document_file_permission"/>
+            <field name="state">code</field>
+            <field name="code">model._process_sync_user_read_permission_queue(100)</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+        <record id="ir_cron_mass_sync_document_file_write_permission_queue" model="ir.cron">
+            <field name="name">#1. Document File Permission: Write : Process queue</field>
+            <field name="model_id" ref="model_document_file_permission"/>
+            <field name="state">code</field>
+            <field name="code">model._process_sync_user_write_permission_queue(100)</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+        <record id="ir_cron_mass_sync_document_file_drop_permission_queue" model="ir.cron">
+            <field name="name">#1. Document File Permission: Drop : Process queue</field>
+            <field name="model_id" ref="model_document_file_permission_error"/>
+            <field name="state">code</field>
+            <field name="code">model._process_sync_drop_permission_queue(100)</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+        <!--cron update permission for external users-->
+        <record id="ir_cron_mass_sync_document_file_external_permission_queue" model="ir.cron">
+            <field name="name">#1. Document File External Permission: Process queue</field>
+            <field name="model_id" ref="model_external_users_permission"/>
+            <field name="state">code</field>
+            <field name="code">model._process_sync_external_permission_queue(100)</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+        <record id="ir_cron_mass_sync_document_file_public_permission_queue" model="ir.cron">
+            <field name="name">#1. Document  File Public Permission: Process queue</field>
+            <field name="model_id" ref="model_document_file_public_permission"/>
+            <field name="state">code</field>
+            <field name="code">model._process_sync_permission_queue(100)</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+        <record id="ir_cron_drop_old_user_inactive_out_of_document_permission" model="ir.cron">
+            <field name="name">#1. Document File Permission Inactive User: Process queue</field>
+            <field name="model_id" ref="model_res_users"/>
+            <field name="state">code</field>
+            <field name="code">model._process_drop_out_inactive_permission_queue()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+    </data>
+</odoo>

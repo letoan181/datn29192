@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="structure_type_employee" model="hr.payroll.structure.type">
+            <field name="name"># Employee</field>
+            <field name="country_id" eval="False"/>
+        </record>
+        <record id="basic_structure" model="hr.payroll.structure">
+<!--             <field name="code">BS</field>-->
+            <field name="name">Basic Structure</field>
+            <field name="type_id" ref="advanced_payroll.structure_type_employee"/>
+            <field name="regular_pay" eval="True"/>
+            <field name="country_id" eval="False"/>
+<!--            <field eval="[(6, 0, [ref('hr_rule_salary_with_work_days'), ref('hr_rule_fine'), ref('hr_rule_lunch_allowance'), ref('hr_rule_personal_income_tax'),-->
+<!--                    ref('hr_rule_bonus'),ref('hr_rule_over_time_normal_day'),ref('hr_rule_over_time_holiday'),ref('hr_rule_travel_allowance'),ref('hr_rule_telephone_allowance'),-->
+<!--                    ref('hr_rule_responsibility_allowance'), ref('hr_rule_seniority_allowance'),ref('hr_rule_house_rent_allowance'), ref('hr_rule_late_fine'), ref('hr_rule_bhxh')])]"-->
+<!--                   name="rule_ids"/>-->
+<!--            <field name="company_id" ref="base.main_company"/>-->
+        </record>
+        <record id="hr_rule_salary_with_work_days" model="hr.salary.rule">
+            <field name="name">Salary With Work Days</field>
+            <field name="sequence">1</field>
+            <field name="code">BASIC</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">
+sum = 0
+for e in payslip.worked_days_line_ids:
+   sum += e.number_of_hours / 8
+if contract.type == 'partime':
+   result = contract.wage * 2 * (sum+payslip.number_day_off_allow_month) / payslip.number_work_day_month
+elif contract.type == 'fulltime':
+   result  = contract.wage * (sum+payslip.number_day_off_allow_month-payslip.leave/8) / payslip.number_work_day_month
+            </field>
+        </record>
+
+        <record id="hr_rule_personal_income_tax" model="hr.salary.rule">
+            <field name="name">Personal Income Tax</field>
+            <field name="sequence">6</field>
+            <field name="code">PIT</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">sum_salary = BASIC + BN + LA + TrA + TeA + ReA + SeA  + OVTND + OVTHD + FE
+if LA > 730000:
+    salary_not_compute_tax = OVTND/3 + OVTHD *2/3 + 730000 + TeA + 9000000
+else:
+    salary_not_compute_tax = OVTND/3 + OVTHD *2/3 + LA + TeA + 9000000
+salary_compute_tax = sum_salary - salary_not_compute_tax
+if salary_compute_tax*15/100 > HreA:
+     salary_compute_tax += HreA
+else:
+     salary_compute_tax += salary_compute_tax*15/100
+salary_compute_tax = salary_compute_tax - contract.family_circumtance_deductions + BHXH
+if salary_compute_tax &lt;= 0:
+    value = 0
+else:
+    salary_compute_tax_level = salary_compute_tax / 1000000
+    if salary_compute_tax_level &lt;= 5:
+        value = salary_compute_tax * 5 / 100
+    elif 5 &lt; salary_compute_tax_level &lt;= 10:
+        value = salary_compute_tax * 10 / 100 - 250000
+    elif 10 &lt; salary_compute_tax_level &lt;= 18:
+        value = salary_compute_tax * 15 / 100 - 750000
+    elif 18 &lt; salary_compute_tax_level &lt;= 32:
+        value = salary_compute_tax * 20 / 100 - 1650000
+    elif 32 &lt; salary_compute_tax_level &lt;= 52:
+        value = salary_compute_tax * 25 / 100 - 3250000
+    elif 52 &lt; salary_compute_tax_level &lt;= 80:
+        value = salary_compute_tax * 30 / 100 - 5850000
+    elif 80 &lt; salary_compute_tax_level:
+        value = salary_compute_tax * 35 / 100 - 9850000
+result = -value
+            </field>
+        </record>
+
+        <record id="hr_rule_late_fine" model="hr.salary.rule">
+            <field name="name">Late Total</field>
+            <field name="sequence">3</field>
+            <field name="code">LT</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">result = - payslip.late_total</field>
+        </record>
+
+        <record id="hr_rule_fine" model="hr.salary.rule">
+             <field name="name">Fine</field>
+            <field name="sequence">3</field>
+             <field name="code">FE</field>
+             <field name="category_id" ref="hr_payroll.BASIC"/>
+             <field name="condition_select">none</field>
+             <field name="amount_select">code</field>
+             <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+             <field name="amount_python_compute">result = - payslip.fine</field>
+        </record>
+
+        <record id="hr_rule_bonus" model="hr.salary.rule">
+            <field name="name">Bonus</field>
+            <field name="sequence">3</field>
+            <field name="code">BN</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">result =  payslip.bonus</field>
+        </record>
+
+
+        <record id="hr_rule_lunch_allowance" model="hr.salary.rule">
+            <field name="name">Lunch Allowance</field>
+            <field name="sequence">4</field>
+            <field name="code">LA</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">result = contract.lunch_allowance</field>
+        </record>
+
+
+        <record id="hr_rule_travel_allowance" model="hr.salary.rule">
+            <field name="name">Travel Allowance</field>
+            <field name="sequence">4</field>
+            <field name="code">TrA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">result = contract.travel_allowance</field>
+        </record>
+
+        <record id="hr_rule_telephone_allowance" model="hr.salary.rule">
+            <field name="name">Telephone Allowance</field>
+            <field name="sequence">4</field>
+            <field name="code">TeA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">result = contract.telephone_allowance</field>
+        </record>
+
+        <record id="hr_rule_responsibility_allowance" model="hr.salary.rule">
+            <field name="name">Responsibility Allowance</field>
+            <field name="sequence" eval="4"/>
+            <field name="code">ReA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">result = contract.responsibility_allowance</field>
+        </record>
+
+
+        <record id="hr_rule_seniority_allowance" model="hr.salary.rule">
+            <field name="name">Seniority Allowance</field>
+            <field name="sequence">4</field>
+            <field name="code">SeA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">result = contract.seniority_allowance</field>
+        </record>
+
+        <record id="hr_rule_house_rent_allowance" model="hr.salary.rule">
+            <field name="name">House Rent Allowance</field>
+            <field name="sequence">4</field>
+            <field name="code">HreA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">result = contract. house_rent_allowance</field>
+        </record>
+
+        <record id="hr_rule_bhxh" model="hr.salary.rule">
+            <field name="name">BHXH</field>
+            <field name="sequence">4</field>
+            <field name="code">BHXH</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">result = - contract.social_insurance*10.5/100</field>
+        </record>
+
+        <record id="hr_rule_over_time_normal_day" model="hr.salary.rule">
+            <field name="name">Over Time Normal Day</field>
+            <field name="sequence">5</field>
+            <field name="code">OVTND</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">
+cong = contract.wage / (payslip.number_work_day_month * 8 )
+result = payslip.over_time_normal_day*1.5*cong
+            </field>
+        </record>
+
+         <record id="hr_rule_over_time_holiday" model="hr.salary.rule">
+             <field name="name">Over Time Holiday</field>
+             <field name="sequence">5</field>
+             <field name="code">OVTHD</field>
+             <field name="category_id" ref="hr_payroll.BASIC"/>
+             <field name="condition_select">none</field>
+             <field name="amount_select">code</field>
+             <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+             <field name="amount_python_compute">
+cong = contract.wage / (payslip.number_work_day_month * 8 )
+result = payslip.over_time_holiday*3*cong
+            </field>
+        </record>
+        <record id="hr_rule_net_salary" model="hr.salary.rule">
+            <field name="name">Net Salary</field>
+            <field name="sequence">7</field>
+            <field name="code">NET</field>
+            <field name="category_id" ref="hr_payroll.NET"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="struct_id" ref="advanced_payroll.basic_structure"/>
+            <field name="amount_python_compute">result = BASIC + LT + FE + BN + LA + TrA + TeA + ReA + SeA + HreA + BHXH + OVTND + OVTHD + PIT</field>
+        </record>
+
+<!--        <delete model="hr.payroll.structure" search="[('id','=',ref('hr_payroll.structure_base'))]"/>-->
+<!--        <delete model="hr.salary.rule" search="[('id','=',ref('hr_payroll.hr_salary_rule_houserentallowance1'))]"/>-->
+    </data>
+</odoo>

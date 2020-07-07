@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="crm_document_edit_form" model="ir.ui.view">
+            <field name="name">crm.document.field.inherit.form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="document_tab_visible" invisible="1"/>
+                </xpath>
+                <xpath expr="//page[@name='lead']" position="after">
+                    <page name="crm_document" string="Document"
+                          attrs="{'invisible': [('document_tab_visible', '=', False)] }">
+                        <group>
+                            <field name="document_crm_name"
+                                   class="o_field_char o_field_widget o_input document_crm_name"/>
+                            <!--<field name="google_drive_url" widget="url" text="Open Google Drive"/>-->
+                        </group>
+                        <group name="group_document_crm_part"
+                               class="o_group o_inner_group group_document_crm_part">
+                            <field name="document_crm_part"
+                                   attrs="{'invisible' : [('document_crm_name','=', False)]}"/>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="." position="inside">
+                    <script type="text/javascript"
+                            src="/document_management/static/src/js/crm_document_part_field.js"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="ir_actions_server_document_crm_list_special" model="ir.actions.server">
+            <field name="name">valid.document.crm.action.server</field>
+            <field name="model_id" ref="model_crm_lead"/>
+<!--            <field name="view_type">form</field>-->
+<!--            <field name="view_mode">form</field>-->
+            <field name="state">code</field>
+            <field name="code">action = model.action_document_crm_list()</field>
+        </record>
+
+        <record id="ir_actions_server_document_crm_file_list_special" model="ir.actions.server">
+            <field name="name">valid.document.crm.file.action.server</field>
+            <field name="model_id" ref="model_document_crm_file"/>
+<!--            <field name="view_type">form</field>-->
+<!--            <field name="view_mode">form</field>-->
+            <field name="state">code</field>
+            <field name="code">action = model.action_document_crm_file_list()</field>
+        </record>
+
+        <!--kanban, tree, form view for crm-->
+
+        <record id="view_document_crm_kanban" model="ir.ui.view">
+            <field name="name">document.crm.kanban</field>
+            <field name="model">crm.lead</field>
+            <field name="priority">20</field>
+<!--            <field name="view_type">form</field>-->
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors">
+                    <field name="color"/>
+                    <field name="is_favorite"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}} o_has_icon">
+                                <div class="o_general_kanban_main">
+                                    <div t-attf-class="o_kanban_card_header">
+                                        <div class="o_kanban_card_header_title">
+                                            <div class="o_primary">
+                                                <a type="object" name="get_crm_document_action_document_part"
+                                                   context="{'active_id': active_id}">
+                                                    <h1>
+                                                        <field name="document_crm_name"/>
+                                                    </h1>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<field name="google_drive_url" widget="url" text="Open Google Drive"/>-->
+                                    <span class="o_right">
+                                        <field name="is_favorite" widget="boolean_favorite" nolabel="1" force_save="1"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!--        add favorite filter-->
+        <record id="view_crm_search_inherit" model="ir.ui.view">
+            <field name="name">crm.lead.search.inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='assigned_to_me']" position="before">
+                    <filter name="my_favorites" string="My Favorites" domain="[('favorite_user_ids', 'in', uid)]"/>
+                    <separator/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_document_crm_tree" model="ir.ui.view">
+            <field name="name">Folder</field>
+            <field name="model">crm.lead</field>
+            <field name="priority">20</field>
+<!--            <field name="view_type">tree</field>-->
+            <field name="arch" type="xml">
+                <tree string="Name">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+<!--        <record id="view_document_crm_tree" model="ir.ui.view">-->
+<!--            <field name="name">Folder</field>-->
+<!--            <field name="model">crm.lead</field>-->
+<!--            <field name="view_type">tree</field>-->
+<!--            <field name="priority">20</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="Name">-->
+<!--                    <field name="id"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <!--<record id="crm_document_action_document_part_kanban" model="ir.ui.view">-->
+        <!--<field name="name">Documents</field>-->
+        <!--<field name="model">document.crm.part</field>-->
+        <!--<field name="arch" type="xml">-->
+        <!--<kanban>-->
+        <!--<field name="name"/>-->
+        <!--<templates>-->
+        <!--<t t-name="kanban-box">-->
+        <!--<div>-->
+        <!--<div t-attf-class="o_kanban_card_header">-->
+        <!--<div class="o_kanban_card_header_title">-->
+        <!--<div class="o_primary">-->
+        <!--<strong>-->
+        <!--<field name="name"/>-->
+        <!--</strong>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="container o_kanban_card_content">-->
+        <!--<div class="row">-->
+        <!--<field name="google_drive_url" widget="url"/>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</t>-->
+        <!--</templates>-->
+        <!--</kanban>-->
+        <!--</field>-->
+        <!--</record>-->
+        <!--document part kanban view-->
+        <record model="ir.actions.act_window" id="action_document_crm_part_file_list">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Documents File</field>
+            <field name="res_model">document.crm.part</field>
+<!--            <field name="view_type">form</field>-->
+            <field name="view_mode">kanban,form</field>
+        </record>
+        <!--view document crm part-->
+        <record id="view_document_crm_part_file_kanban" model="ir.ui.view">
+            <field name="name">document.crm.part.file.kanban</field>
+            <field name="model">document.crm.part</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors">
+                    <!--<field name="name"/>-->
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div>
+                                <div t-attf-class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <a type="object" name="get_crm_document_action_document_part_file"
+                                               context="{'active_id': active_id}">
+                                                <h1>
+                                                    <field name="name"/>
+                                                </h1>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                    <field name="current_permission_can_update" invisible="1"/>
+                                    <div class="o_kanban_card_manage_section">
+                                        <div role="menuitem"
+                                             attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                            <a type="edit">Edit</a>
+                                        </div>
+                                        <div role="menuitem"
+                                             attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                            <a type="delete">Delete</a>
+                                        </div>
+                                        <div role="menuitem">
+                                            <a name="call_back_parent_root" string="Open Parent Directory" type="object">Open Parent Directory
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="o_kanban_manage_toggle_button o_left" href="#"
+                                   attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                    <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                </a>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="crm_document_action_document_part_form" model="ir.ui.view">
+            <field name="name">Documents</field>
+            <field name="model">document.crm.part</field>
+            <field name="arch" type="xml">
+                <form string="Name" create="false">
+                    <sheet>
+                        <button name="call_back_parent_part" string="Open Parent Directory" type="object"
+                                class="oe_link float-right"
+                                icon="fa-arrow-left"
+                                context="{'active_id': document_crm_id}"
+                                invisible="context.get('active_id',False)"
+                                attrs="{'invisible': [('document_crm_id','=', False)]}"/>
+                        <group>
+                            <field name="document_crm_id" invisible="1"/>
+                            <field name="name"/>
+                            <!--<field name="google_drive_url" widget="url" text="Open Google Drive"/>-->
+                        </group>
+                        <group>
+                            <field name="write_users" can_create="false"/>
+                        </group>
+                        <group>
+                            <field name="read_users" can_create="false"/>
+                        </group>
+                        <group>
+                            <h4>Note: Only manager of this project can create this folder</h4>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_setting_document_crm_part_tree" model="ir.ui.view">
+            <field name="name">crm Folder Parts</field>
+            <field name="model">document.crm.part</field>
+<!--            <field name="context">{-->
+<!--                'create':True,-->
+<!--                }-->
+<!--            </field>-->
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <!--<field name="google_drive_url" widget="url" text="Open Google Drive"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <menuitem id="document_menu_crm" name="CRM" parent="root_document_menu" sequence="3"
+                  groups="group_document_general"/>
+        <menuitem id="document_menu_crm_folder_explorer" name="Folder Explorer" parent="document_menu_crm"
+                  sequence="1"
+                  action="ir_actions_server_document_crm_list_special" groups="group_document_general"/>
+        <menuitem id="document_menu_crm_file_explorer" name="File Explorer" parent="document_menu_crm"
+                  sequence="2"
+                  action="ir_actions_server_document_crm_file_list_special" groups="group_document_general"/>
+        <!--additional search-->
+        <record id="view_crm_lead_filter_document" model="ir.ui.view">
+            <field name="name">crm.lead.list.select.document</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="document_crm_name"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="crm_document_button" model="ir.ui.view">
+            <field name="name">crm.button.inherit.document</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='o_kanban_record_bottom']" position="after">
+                    <div>
+                        <div>
+                            <field name="document_crm_name" invisible="1"/>
+                        </div>
+                        <div>
+                            <a type="object" name="action_document_crm_list"
+                               attrs="{'invisible': [('document_crm_name', '=', False)]}">Document
+                            </a>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+
+</odoo>

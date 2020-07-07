@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_payslip_inherit_form_view" model="ir.ui.view">
+            <field name="name">Employee Payslips</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='credit_note']" position="after">
+                    <field name="currency_id" invisible="1"/>
+                    <field name="fine" widget="monetary"
+                           options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                    <field name="bonus" widget="monetary"
+                           options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                    <field name="late_total" widget="monetary"
+                           options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                    <field name="over_time_normal_day"/>
+                    <field name="over_time_holiday"/>
+                    <field name="leave"/>
+                    <field name="number_work_day_month"/>
+                    <field name="number_day_off_allow_month"/>
+                    <field name="amount_payroll_company_payable" widget="monetary"/>
+                    <field name="amount_employee_receivable" widget="monetary"/>
+                    <field name="amount_social_insurance_company_payable"/>
+                </xpath>
+<!--                <xpath expr="//button[hasclass('oe_stat_button')]" position="after">-->
+<!--                    <button name="get_time_keeping" class="oe_stat_button" icon="fa-calendar" type="object"-->
+<!--                            attrs="{'invisible': [('timekeeping_count', '=', 0)]}">-->
+<!--                        <field name="timekeeping_count" widget="statinfo" string="TimeKeeping"-->
+<!--                               help="TimeKeeping Details"/>-->
+<!--                    </button>-->
+<!--                </xpath>-->
+
+                <xpath expr="//field[@name='line_ids']" position="replace">
+                    <field name="line_ids" colspan="4" nolabel="1">
+                        <tree string="Salary Structure" editable="bottom" decoration-info="total == 0">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="category_id"/>
+                            <field name="sequence" invisible="1"/>
+                            <field name="quantity"/>
+                            <field name="rate"/>
+                            <field name="salary_rule_id"/>
+                            <field name="amount"/>
+<!--                            <field name="total" sum="Total"/>-->
+                            <field name="total"/>
+                        </tree>
+                        <form string="Payslip Line">
+                            <group col="4">
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="category_id"/>
+                                <field name="sequence"/>
+                                <field name="quantity"/>
+                                <field name="rate"/>
+                                <field name="amount"/>
+<!--                                <field name="total" sum="Total"/>-->
+                                 <field name="total"/>
+                                <field name="salary_rule_id"/>
+                            </group>
+                        </form>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+        <record id="hr_payslip_inherit_tree_view" model="ir.ui.view">
+            <field name="name">Employee Payslips Tree</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='employee_id']" position="after">
+                    <field name="emp_bank_account"/>
+                </xpath>
+                <xpath expr="//field[@name='date_from']" position="before">
+                    <field name="currency_id" invisible="1"/>
+                    <field name="amount_employee_receivable" string="Amount" widget="monetary"/>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="after">
+                    <button string="confirm" name="action_payslip_done" type="object"
+                            icon="fa-check text-success"
+                            states="draft,verify"/>
+                </xpath>
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-success">state == 'done'</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

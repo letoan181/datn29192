@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <record id="view_setting_document_permission_tree" model="ir.ui.view">
+            <field name="name">Document Permissions</field>
+            <field name="model">document.permission</field>
+            <field name="arch" type="xml">
+                <tree string="Document Permission Tree">
+                    <field name="id"/>
+                    <field name="file_id"/>
+                    <field name="model"/>
+                    <field name="type"/>
+                    <field name="res_user_id"/>
+                    <field name="google_drive_permission_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_document_permission_form" model="ir.ui.view">
+            <field name="name">Document Permission</field>
+            <field name="model">document.permission</field>
+            <field name="arch" type="xml">
+                <form string="Name">
+                    <header>
+                        <button name="action_fetch_document_permission"
+                                string="Fetch Document Permission"
+                                type="object"/>
+                        <button name="action_drop_document_permission"
+                                string="Drop Document Permission"
+                                type="object"/>
+                        <button name="action_track_permission_change"
+                                string="Check Changes"
+                                type="object"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="model"/>
+                            <field name="type"/>
+                            <field name="res_user_id"/>
+                            <field name="google_drive_permission_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+    <div t-name="document.FolderTree">
+        <div class="row">
+            <div class="col-sm-6 " style="">
+                <div class="o_setting_search" id="search_input"
+                     style="padding: 20px 100px 0px 50px ;"></div>
+                <br/>
+                <div class="folder_tree" style="padding: 20px 100px 20px 50px;"></div>
+            </div>
+            <div class="col-sm-6" id="document_info">
+            </div>
+        </div>
+    </div>
+    <t t-name="document.Search">
+        <input id="o_input_search_nodes" class="searchInput" placeholder="Search File..." type="text"
+                       style="width: 100%;"/>
+    </t>
+    <t t-name="document.Folder.Template">
+        <div class="row">
+                    <div style="font-family:Roboto, Arial, sans-serif;
+                    font-size: 13px;
+                    line-height: 1.42857143;
+                    color: #666666;
+                    ">
+                        <h3 style="padding: 20px 100px 40px 50px;text-align:center">INFORMATION:</h3>
+                    </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3" style="padding-bottom:5px">
+                <div id="folder_tempalte" style="border:solid;border-width: 1px;border-radius:5px;height:50px">
+                    <div style="text-align: center;
+                        margin-top: 4px;">
+                        <img src="/document_management/static/description/images/folders.png"/>
+                        <span>Sh@dowWalker</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
+
+
+
+

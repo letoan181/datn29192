@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_users_preferences_form_inherit" model="ir.ui.view">
+            <field name="name">res.users.preferences.form.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='email']" position="after">
+                    <field name="is_integration_google_calendar" invisible="1"/>
+                    <br/>
+                    <button class="o_my_google_sync_button"
+                            attrs="{'invisible': [('is_integration_google_calendar', '=', True)]}">Click Here To Start
+                        Google Calendar Integration
+                    </button>
+                    <br/>
+                </xpath>
+            </field>
+        </record>
+
+        <template id="assets_backend" name="my_google_calendar assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript"
+                        src="/odoo_google_calendar_integration/static/src/js/google_calendar.js"></script>
+            </xpath>
+        </template>
+    </data>
+</odoo>

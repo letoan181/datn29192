@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend_import" name="Import Button" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+<!--                <script type="text/javascript"-->
+<!--                        src="/magenest_attendance/static/src/js/import_button_access.js"></script>-->
+                <script type="text/javascript"
+                        src="/magenest_attendance/static/src/js/disable_past_datepicker.js"></script>
+            </xpath>
+        </template>
+        <!--View-->
+        <record id="manager_attendance_action" model="ir.actions.act_window">
+            <field name="name">Manage Attendances</field>
+            <field name="res_model">manager.attendance</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="view_send_mail_attendance" model="ir.ui.view">
+            <field name="name">form.view.manager.attendance</field>
+            <field name="model">manager.attendance</field>
+            <field name="arch" type="xml">
+                <form string="Attendance">
+                    <header>
+                        <button name="send_sheet_to_employee" string=" Send Sheet To Employee" type="object"
+                                class="btn-primary"
+                                icon="fa-paper-plane"
+                                confirm="Are you sure you want to send Sheet for all employee?" states='outgoing'/>
+                        <button name="mark_outgoing" string="Retry" type="object" states='sent'
+                                confirm="Are you sure you want to restore timekeeping of all employee?"/>
+                        <button name="mark_cancel" string="Cancel" type="object" class="btn-secondary"
+                                states='sent,outgoing'/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="outgoing,sent,received,exception,cancel"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="date"/>
+                            <field name="check_in_date"/>
+                            <field name="check_out_date"/>
+                            <field name="number_of_workday"/>
+                            <field name="user"/>
+                        </group>
+                        <notebook>
+                            <page string="Setting">
+                                <group>
+                                    <field name="time_zone"/>
+                                </group>
+                            </page>
+                            <page string="Time Working">
+                                <label for="hour_am_to" string="Start AM"/>
+                                <field name="hour_am_from" class="oe_inline" widget="float_time"/>
+                                <span class="oe_inline">
+                                    To
+                                </span>
+                                <field name="hour_am_to" class="oe_inline" widget="float_time"/>
+                                <br/>
+                                <label for="hour_pm_from" string="Start PM"/>
+                                <field name="hour_pm_from" class="oe_inline" widget="float_time"/>
+                                <span class="oe_inline">
+                                    To
+                                </span>
+                                <field name="hour_pm_to" class="oe_inline" widget="float_time"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_send_mail_attendance_tree" model="ir.ui.view">
+            <field name="name">tree.view.manager.attendance</field>
+            <field name="model">manager.attendance</field>
+            <field name="arch" type="xml">
+                <tree string="Attendance">
+                    <field name="user"/>
+                    <field name="date"/>
+                    <field name="check_in_date"/>
+                    <field name="check_out_date"/>
+                </tree>
+            </field>
+        </record>
+        <!--My attendance-->
+        <record id="my_attendance_action_server" model="ir.actions.server">
+            <field name="name">my.attendance</field>
+            <field name="model_id" ref="model_my_attendance"/>
+            <!--            <field name="view_type">form</field>-->
+<!--            <field name="view_mode">kanban</field>-->
+            <field name="state">code</field>
+            <field name="binding_view_types">kanban</field>
+            <field name="code">action = model.action_call_attendance_list()</field>
+        </record>
+        <record id="all_attendance_action_server" model="ir.actions.server">
+            <field name="name">my.attendance</field>
+            <field name="model_id" ref="model_my_attendance"/>
+            <!--            <field name="view_type">form</field>-->
+<!--            <field name="view_mode">kanban</field>-->
+            <field name="state">code</field>
+            <field name="binding_view_types">kanban</field>
+            <field name="code">action = model.action_call_all_attendance_list()</field>
+        </record>
+        <record id="view_my_attendance_form" model="ir.ui.view">
+            <field name="name">my.attendance.form</field>
+            <field name="model">my.attendance</field>
+            <!--<field name="priority">20</field>-->
+            <!--            <field name="view_type">form</field>-->
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <label for="employee_id" string="Employee: " class="oe_inline"/>
+                            <div class="oe_title">
+                                <field name="employee_id"/>
+                                <field name="employee_info" widget="worktime" class="oe_inline"/>
+                            </div>
+                        </group>
+                        <notebook>
+                            <page string="Detail Timekeeping">
+                                <separator string="TimeKeeping Table"/>
+                                <field name="view" widget="html"/>
+                            </page>
+                            <page string="Detail Salary">
+                                <separator string="Salary Table"/>
+                                <field name="salary_detail" widget="html"/>
+                            </page>
+                            <page string="Feed Back">
+                                <separator string="TimeKeeping"/>
+                                <field name="time_feed_back" widget="section_and_note_one2many" mode="tree"
+                                       attrs="{'readonly':[('state','=','done')]}">
+                                    <tree editable="bottom">
+                                        <field name="date"/>
+                                        <field name="wrong_value"/>
+                                        <field name="description"/>
+                                        <field name="note_permission" invisible="1"/>
+                                        <field name="manager_note"
+                                               attrs="{'readonly': [('note_permission', '=', False)]}"/>
+                                        <field name="state"/>
+                                        <button string="Approve" name="action_approve" type="object"
+                                                icon="fa-check text-success"
+                                                groups="magenest_attendance.group_advanced_import"
+                                                states="draft,refuse"/>
+                                        <button string="Refuse" name="action_refuse" type="object"
+                                                icon="fa-ban text-danger"
+                                                groups="magenest_attendance.group_advanced_import"
+                                                states="draft,confirm"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <!--                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>-->
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="my_attendance_view_filter" model="ir.ui.view">
+            <field name="name">my_attendance_view_filter</field>
+            <field name="model">my.attendance</field>
+            <field name="arch" type="xml">
+                <search string="My Attendance Search">
+                    <field name="employee_id"/>
+                    <field name="name"/>
+                    <filter name="is_feed_back" string="Has FeedBack" domain="[('is_feed_back', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                        <separator/>
+                        <filter name="check_in_filter" string="Check In Date" date="check_in_date"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!--kanban-->
+        <record id="view_my_attendance_kanban" model="ir.ui.view">
+            <field name="name">my.attendance.kanban</field>
+            <field name="model">my.attendance</field>
+            <!--<field name="priority">20</field>-->
+            <!--            <field name="view_type">form</field>-->
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="create_uid"/>
+                    <field name="name"/>
+                    <field name="check_in_date"/>
+                    <field name="check_out_date"/>
+                    <field name="user_create"/>
+                    <field name="employee_id"/>
+                    <field name="color"/>
+                    <field name="state"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click">
+                                <div>
+                                    <img t-att-src="kanban_image('hr.employee', 'image_128', record.employee_id.raw_value)"
+                                         t-att-title="record.employee_id.value" t-att-alt="record.employee_id.value"
+                                         width="24" height="24" class="oe_kanban_avatar mr4"/>
+                                    <span class="o_kanban_record_title">
+                                        <a type="object" name="get_my_attendance_filter">
+                                            <strong>
+                                                <t t-esc="record.name.value"/>
+                                            </strong>
+                                        </a>
+                                    </span>
+                                </div>
+                                <hr class="mt4 mb8"/>
+                                <div class="o_kanban_record_subtitle">
+                                    <i class="fa fa-calendar" aria-label="Period" role="img" title="Period"/>
+                                    <t t-esc="record.check_in_date.value"/>
+                                    -
+                                    <t t-esc="record.check_out_date.value"/>
+                                </div>
+                                <hr class="mt4 mb8"/>
+                                <div class="float-left">
+                                    <t t-if="record.state.raw_value == 'done'">
+                                        <strong style="color: red">
+                                            Status:
+                                            <t t-esc="record.state.value"/>
+                                        </strong>
+                                    </t>
+                                    <t t-else="">
+                                        <strong style="color: green">
+                                            Status:
+                                            <t t-esc="record.state.value"/>
+                                        </strong>
+                                    </t>
+                                </div>
+                                <div class="float-right">
+                                    <a type="object" name="view_timekeeping_template">
+                                        <strong>
+                                            View Details
+                                        </strong>
+                                    </a>
+                                    <img t-att-src="kanban_image('res.users', 'image_128', record.user_create.raw_value)"
+                                         t-att-title="record.user_create.value" t-att-alt="record.user_create.value"
+                                         width="24" height="24" class="oe_kanban_avatar mr4"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!--overtime-->
+        <record id="manager_overtime_action" model="ir.actions.act_window">
+            <field name="name">Manage overtime</field>
+            <field name="res_model">employee.overtime</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">calendar,tree,form</field>
+            <field name="domain"/>
+            <field name="target">current</field>
+        </record>
+        <!--feedback-->
+        <record id="view_feedback_form" model="ir.ui.view">
+            <field name="name">feedback.line</field>
+            <field name="model">timekeeping.line</field>
+            <!--<field name="priority">20</field>-->
+            <!--            <field name="view_type">form</field>-->
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="date" attrs="{'readonly': [('state', 'in', ('confirm', 'refuse'))]}"/>
+                            <field name="wrong_value" attrs="{'readonly': [('state', 'in', ('confirm', 'refuse'))]}"/>
+                            <field name="description" attrs="{'readonly': [('state', 'in', ('confirm', 'refuse'))],}"/>
+                            <div groups="magenest_attendance.group_advanced_import">
+                                <separator string="Comment by Manager"/>
+                                <field name="manager_note" placeholder="e.g. Note By Admin..."/>
+                            </div>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!--Employee single handle-->
+        <act_window name="Single Attendee Handle"
+                    res_model="single.handle"
+                    binding_model="manager.attendance"
+                    id="single_emp_attendance_handle"
+                    view_mode="form"
+                    target="new"/>
+
+
+        <record id="single_attendance_handle_action" model="ir.actions.act_window">
+            <field name="name">Single Attendee Handle Action</field>
+            <field name="res_model">single.handle</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="single_attendance_handle_form" model="ir.ui.view">
+            <field name="name">single.handle.form</field>
+            <field name="model">single.handle</field>
+            <field name="arch" type="xml">
+                <form string="Singgle Timekeeping">
+                    <sheet>
+                        <group>
+                            <field name="employee"/>
+                        </group>
+                        <footer>
+                            <button name="send_sheet_to_employee" type="object"
+                                    string="Send Timekeeping Sheet" class="oe_highlight"/>
+                            <button special="cancel" string="Cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!--Management attendance in technical setting-->
+        <record id="manager_my_attendance_action" model="ir.actions.act_window">
+            <field name="name">My Attendance Action</field>
+            <field name="res_model">my.attendance</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="context">{'create': False}</field>
+            <field name="view_mode">tree,kanban</field>
+        </record>
+        <record id="my_attendance_handle_tree" model="ir.ui.view">
+            <field name="name">my.attendance.tree</field>
+            <field name="model">my.attendance</field>
+            <field name="arch" type="xml">
+                <tree string="My Attendance">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="check_in_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <menuitem id="attendance_tech_menu_parent" name="Attendances" parent="base.menu_custom"
+                  groups="base.group_no_one"/>
+        <menuitem id="attendance_tech_menu" name="Attendance" parent="magenest_attendance.attendance_tech_menu_parent"
+                  action="manager_my_attendance_action" groups="base.group_no_one"/>
+        <!--Menu-->
+        <!--<menuitem id="manage_attendance_menu" parent="hr_attendance.menu_hr_attendance_root" sequence="50"-->
+        <!--groups="hr_attendance.group_hr_attendance_user"-->
+        <!--name="Manager Attendance"/>-->
+        <menuitem id="manage_attendance_menu_timekeeping" parent="magenest_attendance.zk_machine_menu"
+                  action="manager_attendance_action" groups="magenest_attendance.group_advanced_import"
+                  name="Timekeeping"/>
+        <menuitem id="manage_attendance_menu_overtime" parent="hr_attendance.menu_hr_attendance_root"
+                  sequence="10"
+                  action="manager_overtime_action"
+                  name="OverTime"/>
+        <menuitem id="menu_my_attendance" name="My TimeKeeping"
+                  parent="hr_attendance.menu_hr_attendance_manage_attendances" sequence="20"
+                  action="my_attendance_action_server"/>
+        <menuitem id="menu_all_attendance" name="All TimeKeeping"
+                  parent="hr_attendance.menu_hr_attendance_manage_attendances" sequence="30"
+                  action="all_attendance_action_server"/>
+    </data>
+</odoo>

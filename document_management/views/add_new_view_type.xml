@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_document_general_folder" model="ir.ui.view">
+            <field name="name">Document</field>
+            <field name="model">document.general</field>
+            <!--            <field name="type">folder</field>-->
+            <field name="arch" type="xml">
+                <folder string="Sh@dowWalker">
+                    <field name="name"/>
+                </folder>
+            </field>
+        </record>
+        <record id="view_document_project_folder" model="ir.ui.view">
+            <field name="name">Document</field>
+            <field name="model">project.project</field>
+<!--            <field name="type">folder</field>-->
+            <field name="arch" type="xml">
+                <folder string="Sh@dowWalker">
+
+                </folder>
+            </field>
+        </record>
+        <record id="view_document_quotation_folder" model="ir.ui.view">
+            <field name="name">Document</field>
+            <field name="model">sale.order</field>
+<!--            <field name="type">folder</field>-->
+            <field name="arch" type="xml">
+                <folder string="Sh@dowWalker">
+                    <field name="name"/>
+                </folder>
+            </field>
+        </record>
+        <record id="view_document_crm_folder" model="ir.ui.view">
+            <field name="name">Document</field>
+            <field name="model">crm.lead</field>
+<!--            <field name="type">folder</field>-->
+            <field name="arch" type="xml">
+                <folder string="Sh@dowWalker">
+                    <field name="name"/>
+                </folder>
+            </field>
+        </record>
+    </data>
+</odoo>

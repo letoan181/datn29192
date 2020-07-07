@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+                <t t-name="ShowEmployeeWorkInfo">
+                   <a role="button" tabindex="0" class="js_employee_info fa fa-info-circle"  style="margin-left:10px;" aria-label="Info" title="Employee Info"
+                                          data-toggle="tooltip"></a>
+                </t>
+                <t t-name="EmployeeWorkInfo">
+                    <div>
+                        <table>
+                            <tr>
+                                <td><strong>Contract Type: </strong></td>
+                                <td>
+                                    <t t-esc="type"></t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Working Day</strong></td>
+                                <td><strong>From</strong></td>
+                                <td><strong>To</strong></td>
+                            </tr>
+                            <t t-foreach="worktime" t-as="work">
+                                <tr>
+                                    <td><t t-esc="work['day']"></t></td>
+                                    <td><t t-esc="work['from']"></t></td>
+                                    <td><t t-esc="work['to']"></t></td>
+                                </tr>
+                            </t>
+                        </table>
+                    </div>
+                </t>
+        </templates>

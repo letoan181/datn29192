@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="dayoff_form_view_inherit" model="ir.ui.view">
+            <field name="name">Day off inherit</field>
+            <field name="model">attendance.day.off</field>
+            <field name="inherit_id" ref="employee_time_table.dayoff_form_view"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='description']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <field name="paid_holidays"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

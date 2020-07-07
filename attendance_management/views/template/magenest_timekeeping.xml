@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <template id="email_timekeeping" name="hr.attendance.timekeeping.template">
+            <t t-call="web.html_container">
+                <div class="page">
+                    <table class="table table-sm table-bordered">
+                        <colgroup>
+                            <col style="width:80px;"/>
+                            <col style="width:47px;"/>
+                            <col style="width:48px;"/>
+                            <col style="width:91px;"/>
+                            <col style="width:106px;"/>
+                            <col style="width:53px;"/>
+                            <col style="width:60px;"/>
+                            <col style="width:60px;"/>
+                            <col style="width:60px;"/>
+                            <col style="width:60px;"/>
+                            <col style="width:103px;"/>
+                            <col style="width:75px;"/>
+                            <col style="width:180px;"/>
+                        </colgroup>
+                        <tr>
+                            <th colspan="13" style="text-align:center;background-color:#f38630">Magenest's Details
+                                TimeKeeping -<span
+                                        t-esc="data['month']"/>/
+                                <span t-esc="data['year']"/>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td colspan="13">Employee Device ID:
+                                <span t-esc="data['em_id']"/>
+                                <span>-</span>Employee Name:
+                                <span t-esc="data['name']"/>
+                                <span>-</span>Department :
+                                <span t-esc="data['department']"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p style="font-size: 25px;">
+                                    <b>Total:</b>
+                                </p>
+                                <p>
+                                    <em>
+                                        <b>(Exclude Leaves outside Checkin - Checkout)</b>
+                                    </em>
+                                </p>
+                            </td>
+                            <td colspan="2" style="text-align:center;">
+                                <span style="font-size: 23px; color: #f20000; font-weight: 800;" t-esc="data['work_hour_total']"/>
+                                Hours
+                                <p>
+                                    <em>
+                                        <b>(TimeSheet)</b>
+                                    </em>
+                                </p>
+                                <span t-esc="data['time_sheet_total']"/> Hours
+                            </td>
+                            <td rowspan="4"></td>
+                            <td>Late Count</td>
+                            <td colspan="2">
+                                <span t-esc="data['late_amount']"/>
+                            </td>
+                            <td rowspan="3"></td>
+                            <td rowspan="3"></td>
+                            <td></td>
+                            <td>Late Time Total</td>
+                            <td>
+                                <span t-esc="data['late_total']"/>
+                                Mins
+                            </td>
+                            <td rowspan="4">
+                                <strong>ACRONYM LIST</strong>
+                                <br></br>
+                                <span>- OF: Office Hours</span>
+                                <br></br>
+                                <span>- OT: Over Time</span>
+                                <br></br>
+                                <span>- WHELP:
+                                    <b>Work hours exclude leave(paid)</b>
+                                </span>
+                                <p>
+                                    <b>- <span style="color: #f20000;">SALARY</span> depends <span style="color: #f20000;">ONLY</span> on
+                                        <span style="color: #f20000;">WORK TOTAL</span>
+                                    </b>
+                                </p>
+                                <p>
+                                    <b style="color: #f20000;">- Leaves outside Checkin - Checkout do not affect to salary</b>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>OT Normal</td>
+                            <td>
+                                <span t-esc="data['over_time_assign']"/>
+                            </td>
+                            <td>Hours</td>
+                            <td>Rate Total
+                                <p>
+                                    <em>
+                                        <b>(Exclude Leaves outside Checkin - Checkout)</b>
+                                    </em>
+                                </p>
+                            </td>
+                            <td colspan="2"><span t-esc="data['all_earn']"/>/
+                                <span t-esc="data['work_days']"/>
+                            </td>
+                            <td rowspan="3"></td>
+                            <td>Forget Checkout Time</td>
+                            <td>
+                                <span t-esc="data['lose_checkout']"/>
+                                Times
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>OT Holiday</td>
+                            <td>
+                                <span t-esc="data['over_time_holiday']"/>
+                            </td>
+                            <td>Hours</td>
+                            <td>Leaves
+                                <p>
+                                    <em>
+                                        <b>(Unpaid - Exclude Leaves outside Checkin - Checkout)</b>
+                                    </em>
+                                </p>
+                            </td>
+                            <td colspan="2">
+                                <span t-esc="data['leave_total_up']"/>
+                                Hours
+                            </td>
+                            <td>Absent
+                                <p>
+                                    <em>
+                                        <b>(Exclude Leaves outside Checkin - Checkout)</b>
+                                    </em>
+                                </p>
+                            </td>
+                            <td>
+                                <span t-esc="data['leave_count']"/>
+                                Leaves
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Leaves(Paid)</td>
+                            <td colspan="2">
+                                <span t-esc="data['leave_total_p']"/>
+                                Hours
+                            </td>
+                            <td></td>
+                            <td></td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="12" style="text-align:center;">DETAILS</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" style="text-align:center;">Date</td>
+                            <td rowspan="2" style="text-align:center;">Day</td>
+                            <td rowspan="2" style="text-align:center;">Shift</td>
+                            <td colspan="2" style="text-align:center;">Time In/Out</td>
+                            <td rowspan="2" style="text-align:center;">Late</td>
+                            <td rowspan="2" style="text-align:center;">Time Work
+                                <p>
+                                    <em>
+                                        <b>(Exclude Leaves outside Checkin - Checkout)</b>
+                                    </em>
+                                </p>
+                            </td>
+                            <td rowspan="2" style="text-align:center;">Time Sheet
+                                <p>
+                                    <em>
+                                        <b>(Time Sheet in day)</b>
+                                    </em>
+                                </p>
+                            </td>
+                            <td rowspan="2" style="text-align:center;">Leave (UnPaid)
+                                <p>
+                                    <em>
+                                        <b>(Only Leaves outside Checkin - Checkout)</b>
+                                    </em>
+                                </p>
+                            </td>
+                            <td rowspan="2" style="text-align:center;">Leave (Paid)
+                                <p>
+                                    <em>
+                                        <b>(Only Leaves outside Checkin - Checkout)</b>
+                                    </em>
+                                </p>
+                            </td>
+                            <!--                            <td rowspan="2" style="text-align:center;">Rate</td>-->
+                            <td colspan="2" style="text-align:center;">OverTime</td>
+                            <td rowspan="2" style="text-align:center;">Note</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;">Check In</td>
+                            <td style="text-align:center;">Check Out</td>
+                            <td style="text-align:center;">Normal Day</td>
+                            <td style="text-align:center;">Holiday</td>
+                        </tr>
+                        <t t-foreach="body" t-as="vals">
+                            <tr t-attf-style="background-color:#{vals['active'][0]}; color:#{vals['active'][1]}">
+                                <td>
+                                    <span t-esc="vals['date']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="vals['day']"/>
+                                </td>
+                                <td>OF</td>
+                                <td style="text-align:center;">
+                                    <span t-esc="vals['check_in_time']"/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span t-esc="vals['check_out_time']"/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span t-esc="vals['late']"/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span t-esc="vals['work_hour']"/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span t-esc="vals['time_sheet']"/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span t-esc="vals['leave_up']"/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <!--                                    <span t-esc="vals['earn']"/>-->
+                                    <span t-esc="vals['leave_p']"/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span t-esc="vals['over_time']"/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span t-esc="vals['over_time_holiday']"/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span t-esc="vals['note']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+                </div>
+            </t>
+        </template>
+        <template id="employee_salary_details">
+            <t t-call="web.html_container">
+                <t t-foreach="value" t-as="o">
+                    <!--<t t-call="web.external_layout">-->
+                    <div class="page">
+                        <h2>Magenest's Details Salary</h2>
+                        <p t-field="o.name"/>
+
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <td>
+                                    <strong>Name</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.employee_id"/>
+                                </td>
+                                <td>
+                                    <strong>Designation</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.employee_id.job_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Address</strong>
+                                </td>
+                                <td colspan="3">
+                                    <div t-field="o.employee_id.address_home_id"
+                                         t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Email</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.employee_id.work_email"/>
+                                </td>
+                                <td>
+                                    <strong>Identification No</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.employee_id.identification_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Reference</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.number"/>
+                                </td>
+                                <td>
+                                    <strong>Bank Account</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.employee_id.bank_account_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Date From</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.date_from"/>
+                                </td>
+                                <td>
+                                    <strong>Date To</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.date_to"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Salary Total</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.amount_employee_receivable"
+                                          t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Quantity/rate</th>
+                                    <th>Amount</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip)"
+                                    t-as="line">
+                                    <td>
+                                        <span t-field="line.code"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.quantity"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.amount"
+                                              t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.total"
+                                              t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p class="text-right">
+                            <strong>Authorized signature</strong>
+                        </p>
+                    </div>
+                    <!--</t>-->
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

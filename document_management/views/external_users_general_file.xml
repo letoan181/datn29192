@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!--form view external user-->
+    <record id="external_users_tree" model="ir.ui.view">
+        <field name="name">Documents External</field>
+        <field name="model">external.users.permission</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="user_email"/>
+                        <field name="type"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--inherit project file form-->
+    <record id="project_file_add_external_users" model="ir.ui.view">
+        <field name="name">external.user.project.file</field>
+        <field name="model">document.project.file</field>
+        <field name="inherit_id" ref="document_management.view_document_project_file_form"/>
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="type"]' position='after'>
+                <label for="public"/>
+                <div>
+                    <field name="public" class="oe_inline"/>
+                    <field name="public_type" class="oe_inline" attrs="{'invisible': [('public', '=', False)]}"/>
+                </div>
+            </xpath>
+            <xpath expr='//field[@name="read_users"]' position='after'>
+                <field name="external_users">
+                    <tree editable="bottom">
+                        <field name="name"/>
+                        <field name="user_email"/>
+                        <field name="type"/>
+                    </tree>
+                </field>
+            </xpath>
+            <xpath expr='//button[@name="action_fetch_file_permission"]' position='after'>
+                <button name="action_fetch_project_file_permission_external_user"
+                        string="Update Permission For External Users" type="object"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="quotation_file_add_external_users" model="ir.ui.view">
+        <field name="name">external.user.quotation.file</field>
+        <field name="model">document.quotation.file</field>
+        <field name="inherit_id" ref="document_management.view_document_quotation_file_form"/>
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="type"]' position='after'>
+                <label for="public"/>
+                <div>
+                    <field name="public" class="oe_inline"/>
+                    <field name="public_type" class="oe_inline" attrs="{'invisible': [('public', '=', False)]}"/>
+                </div>
+            </xpath>
+            <xpath expr='//field[@name="read_users"]' position='after'>
+                <field name="external_users">
+                    <tree editable="bottom">
+                        <field name="name"/>
+                        <field name="user_email"/>
+                        <field name="type"/>
+                    </tree>
+                </field>
+            </xpath>
+            <xpath expr='//button[@name="action_fetch_file_permission"]' position='after'>
+                <button name="action_fetch_quotation_file_permission_external_user"
+                        string="Update Permission For External Users" type="object"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="crm_file_add_external_users" model="ir.ui.view">
+        <field name="name">external.user.crm.file</field>
+        <field name="model">document.crm.file</field>
+        <field name="inherit_id" ref="document_management.view_document_crm_file_form"/>
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="type"]' position='after'>
+                <label for="public"/>
+                <div>
+                    <field name="public" class="oe_inline"/>
+                    <field name="public_type" class="oe_inline" attrs="{'invisible': [('public', '=', False)]}"/>
+                </div>
+            </xpath>
+            <xpath expr='//field[@name="read_users"]' position='after'>
+                <field name="external_users">
+                    <tree editable="bottom">
+                        <field name="name"/>
+                        <field name="user_email"/>
+                        <field name="type"/>
+                    </tree>
+                </field>
+            </xpath>
+            <xpath expr='//button[@name="action_fetch_file_permission"]' position='after'>
+                <button name="action_fetch_crm_file_permission_external_user"
+                        string="Update Permission For External Users" type="object"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

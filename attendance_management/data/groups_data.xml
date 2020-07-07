@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record model="res.groups" id="group_advanced_import">
+            <field name="name"># 1. Biometric-Manager</field>
+<!--            <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>-->
+<!--            <field name="groups">base.group_system</field>-->
+        </record>
+        <record model="res.groups" id="group_overtime_manager">
+            <field name="name"># 1. OverTime-Manager</field>
+<!--            <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>-->
+<!--            <field name="groups">base.group_system</field>-->
+        </record>
+        <record model="res.groups" id="group_overtime_user">
+            <field name="name"># 1. OverTime-User</field>
+        </record>
+        <record id="rule_over_time_employee" model="ir.rule">
+            <field name="name">1. Employee can read own over time</field>
+            <field name="model_id" ref="model_employee_overtime"/>
+            <field name="domain_force">[('employee_id','in',[user.employee_ids.id])]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="perm_read" eval="1"/>
+            <field name="active" eval="1"/>
+        </record>
+        <record id="rule_over_time_user" model="ir.rule">
+            <field name="name">1. Department Head can read and create own over time</field>
+            <field name="model_id" ref="model_employee_overtime"/>
+            <field name="domain_force">[('create_uid','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('magenest_attendance.group_overtime_user'))]"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="active" eval="1"/>
+        </record>
+        <record id="rule_over_time_manager" model="ir.rule">
+            <field name="name">1. Admin full access on overtime</field>
+            <field name="model_id" ref="model_employee_overtime"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('magenest_attendance.group_overtime_manager'))]"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="active" eval="1"/>
+        </record>
+        <record id="rule_over_time_admin" model="ir.rule">
+            <field name="name">1. Admin full access on overtime</field>
+            <field name="model_id" ref="model_employee_overtime"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="active" eval="1"/>
+        </record>
+    </data>
+</odoo>

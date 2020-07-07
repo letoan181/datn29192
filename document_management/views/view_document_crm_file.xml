@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--action addtional edit-->
+    <record id="view_document_crm_file_additional_form" model="ir.ui.view">
+        <field name="name">Document File</field>
+        <field name="model">document.crm.file</field>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <form string="Document File Form">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+
+                        <field name="res_id" invisible="1"/>
+                        <field name="type"/>
+                        <field name="file_id" invisible="1"/>
+                        <field name="google_drive_url" widget="url" text="Open Google Drive"
+                               attrs="{'invisible': [('google_drive_url', '=', False)]}"/>
+                        <field name="write_users"/>
+                        <field name="read_users"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_document_crm_file_additional_edit">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Edit</field>
+        <field name="res_model">document.crm.file</field>
+        <!--            <field name="view_type">form</field>-->
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_document_crm_file_additional_form"/>
+    </record>
+
+    <!--general part file kanban view-->
+
+    <record id="general_document_action_document_crm_part_file_kanban" model="ir.ui.view">
+        <field name="name">Documents File</field>
+        <field name="model">document.crm.file</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors">
+                <!--<field name="name"/>-->
+                <field name="color"/>
+                <field name="current_permission_can_update"/>
+                <field name="create_uid"/>
+                <field name="is_favorite"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.color.raw_value)} o_has_icon oe_kanban_global_click">
+                            <div class="o_file_kanban_main">
+                                <div t-attf-class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <strong>
+                                                <field name="name"/>
+                                            </strong>
+                                        </div>
+                                        <field name="type"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-10 o_kanban_primary_left">
+                                            <field name="google_drive_url" widget="url" text="Open Google Drive"
+                                                   attrs="{'invisible': [('google_drive_url', '=', False)]}"/>
+                                        </div>
+                                        <div class="col-2 o_kanban_primary_right">
+                                            <img t-att-src="kanban_image('res.users', 'image_128', record.create_uid.raw_value)"
+                                                 t-att-title="record.create_uid.value"
+                                                 t-att-alt="record.create_uid.value"
+                                                 width="24" height="24" class="oe_kanban_avatar"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <field name="current_permission_can_update" invisible="1"/>
+                                <div class="o_kanban_card_manage_pane dropdown-menu" role="menu"
+                                     attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                    <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                        <div role="menuitem">
+                                            <a type="edit"
+                                               name="%(action_document_crm_file_additional_edit)d">Edit
+                                            </a>
+                                        </div>
+                                        <div role="menuitem">
+                                            <a type="delete">Delete</a>
+                                        </div>
+                                        <div role="menuitem">
+                                            <a name="call_back_parent_root" string="Open Parent Directory" type="object">
+                                                Open Parent Directory
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!--<div role="menuitem" aria-haspopup="true"-->
+                                    <!--class="o_no_padding_kanban_colorpicker">-->
+                                    <!--<ul class="oe_kanban_colorpicker" data-field="color" role="popup"/>-->
+                                    <!--</div>-->
+                                </div>
+                                <a class="o_kanban_manage_toggle_button o_left" href="#"
+                                   attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                    <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                </a>
+                                <span class="o_right">
+                                    <field name="is_favorite" widget="boolean_favorite" nolabel="1" force_save="1"/>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <!--        add fitler document general-->
+    <record id="document_crm_file_search" model="ir.ui.view">
+        <field name="name">Documents - Search</field>
+        <field name="model">document.crm.file</field>
+        <field name="arch" type="xml">
+            <search string="Documents Search">
+                <field name="name"/>
+                <filter name="my_favorites" string="My Favorites" domain="[('favorite_user_ids', 'in', uid)]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="view_document_crm_file_form" model="ir.ui.view">
+        <field name="name">Document File</field>
+        <field name="model">document.crm.file</field>
+        <field name="arch" type="xml">
+            <form string="Document File Form" edit="false" create="false" delete="false">
+                <header>
+                    <button name="action_fetch_file_permission"
+                            string="Update Permission Now"
+                            type="object"/>
+                </header>
+                <sheet>
+                    <button name="call_back_parent_part" string="Open Parent Directory" type="object"
+                            class="oe_link float-right"
+                            icon="fa-arrow-left"
+                            context="{'active_id': res_id}"
+                            invisible="context.get('active_id',False)"/>
+                    <group>
+                        <field name="name"/>
+                        <field name="res_id" invisible="1"/>
+                        <field name="type" attrs="{'readonly': [('google_drive_url', '!=', False)]}"/>
+                        <field name="file_id" invisible="1"/>
+                        <field name="google_drive_url" widget="url" text="Open Google Drive"
+                               attrs="{'invisible': [('google_drive_url', '=', False)]}"/>
+                        <field name="users_update" widget="many2many_tags"/>
+                        <field name="write_users"/>
+                        <field name="read_users"/>
+                    </group>
+                    <group>
+                        <p>Note: Only user with write access can create this document (Ask crm manager to
+                            update crm document part permission)
+                        </p>
+                        <p>Note: File permission will be updated by cronjob. If you want to update permission now
+                            click "Update Permission Now"
+                        </p>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--        quotation tree view-->
+    <record id="view_document_crm_file_tree" model="ir.ui.view">
+        <field name="name">Document File</field>
+        <field name="model">document.crm.file</field>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <tree string="Document File tree">
+                <field name="name"/>
+                <field name="res_id" invisible="1"/>
+                <field name="type"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--        Mass update user -->
+    <act_window name="# Mass Update Users"
+                res_model="mass.update.crm.file"
+                binding_model="document.crm.file"
+                id="mass_update_crm_file"
+                view_mode="form"
+                target="new"
+                context="{'update': True,
+                    'drop':False}"
+    />
+    <act_window name="# Mass Drop Users"
+                res_model="mass.update.crm.file"
+                binding_model="document.crm.file"
+                id="mass_release_crm_file"
+                view_mode="form"
+                target="new"
+                context="{'update': False,
+                    'drop':True}"
+    />
+    <!--        />-->
+    <!--        Popup message-->
+    <record id="mass_update_crm_file_action" model="ir.actions.act_window">
+        <field name="name">Update File Action</field>
+        <field name="res_model">mass.update.crm.file</field>
+        <!--            <field name="view_type">form</field>-->
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="mass_update_crm_file_action_form" model="ir.ui.view">
+        <field name="name">mass.update.form</field>
+        <field name="model">mass.update.crm.file</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="file" options='{"no_create": True}'/>
+                        <field name="context" invisible="1"/>
+                        <field name="invisible" invisible="1"/>
+                        <field name="users" attrs="{'invisible': ['|',('context','=', 'update'),('invisible', '=', True)]}"/>
+                        <field name="write_users" attrs="{'invisible':['|', ('context','=', 'drop'),('invisible', '=', True)]}"/>
+                        <field name="read_users" attrs="{'invisible': ['|',('context','=', 'drop'),('invisible', '=', True)]}"/>
+                    </group>
+                    <footer>
+                        <button name="update_users" type="object"
+                                string="Update" class="oe_highlight"
+                                attrs="{'invisible': ['|',('context','=', 'drop'),('invisible', '=', True)]}"/>
+                        <button name="delete_user" type="object"
+                                string="Drop" class="oe_highlight"
+                                attrs="{'invisible': ['|',('context','=', 'update'),('invisible', '=', True)]}"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+<!--    new-->
+    <record id="mass_update_can_edit_user_crm_file" model="ir.ui.view">
+        <field name="name">mass.update.form.user</field>
+        <field name="model">mass.update.crm.file</field>
+        <field name="priority">25</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="file" options='{"no_create": True}'/>
+                        <field name="invisible" invisible="1"/>
+                        <field name="users" attrs="{'invisible': [('invisible', '=', True)]}"/>
+                    </group>
+                    <footer>
+                        <button name="update_can_edit_user" type="object"
+                                string="Update" class="oe_highlight"
+                                attrs="{'invisible': [('invisible', '=', True)]}"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+<!--    new mass action to add user can edit-->
+    <act_window name="# Mass Add Editor Users"
+                res_model="mass.update.crm.file"
+                binding_model="document.crm.file"
+                id="mass_add_users_crm_file"
+                view_mode="form"
+                target="new"
+                view_id="document_management.mass_update_can_edit_user_crm_file"
+                context="{'update': False,
+                    'drop':False}"
+    />
+    <record id="mass_update_external_user_crm_file" model="ir.ui.view">
+        <field name="name">mass.update.form.external</field>
+        <field name="model">mass.update.crm.file</field>
+        <field name="priority">25</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="file" options='{"no_create": True}'/>
+                        <field name="invisible" invisible="1"/>
+                        <field name="external_name" attrs="{'invisible': [('invisible', '=', True)]}"/>
+                        <field name="external_email" attrs="{'invisible': [('invisible', '=', True)]}"/>
+                        <field name="external_type" attrs="{'invisible': [('invisible', '=', True)]}"/>
+                    </group>
+                    <footer>
+                        <button name="update_external_users" type="object"
+                                string="Update" class="oe_highlight"
+                                attrs="{'invisible': [('invisible', '=', True)]}"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+<!--    new mass action to add user can edit-->
+    <act_window name="# Mass Update External Users"
+                res_model="mass.update.project.file"
+                binding_model="document.project.file"
+                id="mass_external_users_project_file"
+                view_mode="form"
+                target="new"
+                view_id="document_management.mass_update_external_user_crm_file"
+                context="{'update': False,
+                    'drop':False}"
+    />
+
+</odoo>

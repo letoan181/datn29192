@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <!--action addtional edit-->
+        <record id="view_setting_document_file_permission_tree" model="ir.ui.view">
+            <field name="name">Document File Permissions</field>
+            <field name="model">document.file.permission</field>
+            <field name="arch" type="xml">
+                <tree string="Document File Permission Tree">
+                    <field name="res_user_id"/>
+                    <field name="file_id"/>
+                    <field name="google_drive_permission_id"/>
+                    <field name="type"/>
+                    <field name="status"/>
+                    <field name="error_message"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_document_file_permission_form" model="ir.ui.view">
+            <field name="name">Document File Permission</field>
+            <field name="model">document.file.permission</field>
+            <field name="arch" type="xml">
+                <form string="Document File Permission">
+                    <header>
+                        <button name="action_fetch_document_file_permission"
+                                string="Fetch Document Permission"
+                                type="object"/>
+                        <button name="action_drop_document_file_permission"
+                                string="Drop Document Permission"
+                                type="object"/>
+                        <button name="action_list_permission"
+                                string="List Document Permission"
+                                type="object"/>
+                        <button name="action_detail_permission"
+                                string="Detail Permission"
+                                type="object"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="res_user_id"/>
+                            <field name="file_id"/>
+                            <field name="google_drive_permission_id"/>
+                            <field name="type"/>
+                            <field name="status"/>
+                            <field name="error_message"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <!--action force clear google drive permission id-->
+        <record id="wizard_document_file_permission_clear_google_drive_permission" model="ir.ui.view">
+            <field name="name">wizard.document.file.permission.clear.google.drive.permission.</field>
+            <field name="model">document.file.permission.just.clear.permission</field>
+            <field name="arch" type="xml">
+                <form string="#Document File Permission: Just Clear Permission">
+                    <group>
+                        <field name="document_file_permission" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                    </group>
+
+                    <footer>
+                        <button name="force_clear_permission_to_update_again" type="object"
+                                string="Just Clear Now" class="oe_highlight"/>
+                        or
+
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+<!--        <act_window id="force_document_file_permission_clear_google_drive_permission"-->
+    <!--                    name="#Document File Permission: Just Clear Permission"-->
+    <!--                    src_model="document.file.permission"-->
+    <!--                    res_model="document.file.permission.just.clear.permission"-->
+    <!--                    view_mode="form"-->
+    <!--                    target="new"-->
+    <!--                    key2="client_action_multi"-->
+    <!--                    groups="base.group_system"/>-->
+         <act_window id="force_document_file_permission_clear_google_drive_permission"
+                    name="#Document File Permission: Just Clear Permission"
+
+                    res_model="document.file.permission.just.clear.permission"
+                    view_mode="form"
+                    target="new"
+
+                    groups="base.group_system"/>
+
+</odoo>

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<odoo>
+
+        <record model="ir.ui.view" id="view_users_tree_google_email">
+            <field name="name">res.users.tree.google.email</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='login']" position="replace">
+                    <field name="login" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="google_email"/>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_users_form_google_email">
+            <field name="name">res.users.form.google.email</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/div[hasclass('oe_title')]" position="inside">
+                    <separate/>
+                    <label for="google_email" string="#Document Google Email Address"/>
+                    <h2>
+                        <field name="google_email"/>
+                    </h2>
+                </xpath>
+            </field>
+        </record>
+        <!--action force update google email-->
+        <record id="wizard_res_user_force_update_res_user_google_email_form_view" model="ir.ui.view">
+            <field name="name">wizard.res.user.force.update.google.email.form.view</field>
+            <field name="model">res.users.force_update.google.email</field>
+            <field name="arch" type="xml">
+                <form string="Users: Force Update">
+                    <group>
+                        <field name="res_users" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                    </group>
+
+                    <footer>
+                        <button name="force_update_google_email_by_login" type="object"
+                                string="Update Now" class="oe_highlight"/>
+                        or
+
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+<!--        <act_window id="force_update_res_user_google_email"-->
+<!--                    name="#Document: Force Update Google Email"-->
+<!--                    src_model="res.users"-->
+<!--                    res_model="res.users.force_update.google.email"-->
+<!--                    view_mode="form"-->
+<!--                    target="new"-->
+<!--                    key2="client_action_multi"-->
+<!--                    groups="base.group_system"/>-->
+         <act_window id="force_update_res_user_google_email"
+                    name="#Document: Force Update Google Email"
+
+                    res_model="res.users.force_update.google.email"
+                    view_mode="form"
+                    target="new"
+
+                    groups="base.group_system"/>
+        <!--        update simple modify view of user-->
+
+        <record model="ir.ui.view" id="view_users_form_simple_modif_google email">
+            <field name="name">res.users.form.simple.modif.google.email</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='email']" position="replace">
+                    <field name="email" readonly="1" string="Username"/>
+                </xpath>
+                <xpath expr="//field[@name='email']" position="after">
+                    <field name="google_email" readonly="1" string="#Google Email (Used for read Document)"/>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

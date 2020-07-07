@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+
+        <record id="view_setting_document_general_tree" model="ir.ui.view">
+            <field name="name">Documents</field>
+            <field name="model">document.general</field>
+<!--            <field name="view_type">tree</field>-->
+<!--            <field name="view_mode">tree</field>-->
+            <field name="arch" type="xml">
+                <tree string="Name">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_setting_document_general_part_tree" model="ir.ui.view">
+            <field name="name">General Folder Parts</field>
+            <field name="model">document.general.part</field>
+<!--            <field name="view_type">tree</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+            <field name="arch" type="xml">
+                <tree string="Name">
+                    <field name="name"/>
+                    <!--<field name="google_drive_url"/>-->
+                </tree>
+            </field>
+        </record>
+        <record id="action_setting_document_general_list" model="ir.actions.act_window">
+            <field name="name">General</field>
+            <field name="res_model">document.general</field>
+            <field name="view_id" ref="view_setting_document_general_tree"/>
+        </record>
+        <record id="action_setting_document_general_part_list" model="ir.actions.act_window">
+            <field name="name">General Parts</field>
+            <field name="res_model">document.general.part</field>
+            <field name="view_id" ref="action_setting_document_general_part_tree"/>
+        </record>
+        <record id="action_setting_document_permission" model="ir.actions.act_window">
+            <field name="name">Document Permissions</field>
+            <field name="res_model">document.permission</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="action_setting_document_file_permission" model="ir.actions.act_window">
+            <field name="name">Document Permissions</field>
+            <field name="res_model">document.file.permission</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="action_setting_document_file_permission_error" model="ir.actions.act_window">
+            <field name="name">Document Permissions - Error</field>
+            <field name="res_model">document.file.permission.error</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--Menu-->
+        <menuitem id="document_menu" name="Document" parent="base.menu_custom" groups="base.group_no_one"/>
+        <menuitem id="document_general_menu" name="General Folder" parent="document_menu" groups="base.group_no_one"
+                  action="action_setting_document_general_list" sequence="1"/>
+        <menuitem id="document_general_part_menu" name="General Folder Parts" parent="document_menu"
+                  groups="base.group_no_one" action="action_setting_document_general_part_list" sequence="2"/>
+        <menuitem id="document_permission" name="Document Permissions" parent="document_menu"
+                  groups="base.group_no_one" action="action_setting_document_permission" sequence="3"/>
+        <menuitem id="document_file_permission" name="# Document File Permissions" parent="document_menu"
+                  groups="base.group_no_one" action="action_setting_document_file_permission" sequence="4"/>
+        <menuitem id="document_file_permission_error" name="# Document File Permissions - Error" parent="document_menu"
+                  groups="base.group_no_one" action="action_setting_document_file_permission_error" sequence="5"/>
+
+</odoo>

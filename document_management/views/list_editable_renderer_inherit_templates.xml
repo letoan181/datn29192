@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="mrp assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <!--            <link rel="stylesheet" href="/document_management/static/lib/jsTree/themes/proton/style.css"/>-->
+            <link rel="stylesheet" href="/document_management/static/lib/jsTree/themes/default/style.css"/>
+            <script type="text/javascript" src="/document_management/static/src/js/list_editable_renderer.js"/>
+            <script type="text/javascript" src="/document_management/static/src/js/jstree/view_type_view.js"/>
+            <script type="text/javascript" src="/document_management/static/src/js/jstree/view_type_renderer.js"/>
+            <script type="text/javascript" src="/document_management/static/src/js/jstree/view_type_controllers.js"/>
+            <script type="text/javascript" src="/document_management/static/src/js/jstree/view_type_model.js"/>
+<!--            <script type="text/javascript" src="/document_management/static/src/js/list_disable_import_export.js"/>-->
+        </xpath>
+    </template>
+</odoo>

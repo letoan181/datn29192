@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <menuitem id="root_document_menu" name="Document" sequence="1" groups="group_document_base"
+        icon="document_management,static/description/images/menu.png"
+              web_icon="document_management,static/description/images/menu.png"
+              web_icon_hover="document_management,static/description/images/menu.png"/>
+
+</odoo>
+

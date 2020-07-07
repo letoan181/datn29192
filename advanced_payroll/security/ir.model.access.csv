@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_contract,odoo_vn_accounting.hr_contract,model_hr_contract,,1,1,1,1
+access_hr_payslip,odoo_vn_accounting.hr_payslip,model_hr_payslip,,1,1,1,1
+access_salary_information_line,odoo_vn_accounting_salary_information_line,model_salary_information_line,,1,1,1,1
+access_hr_payslip_monthly_report_manager,hr.payroll.report.view,model_hr_payroll_report_view,,1,1,1,1

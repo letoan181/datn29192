@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_zk_machine_form" model="ir.ui.view">
+        <field name="name">zk.machine.form</field>
+        <field name="model">zk.machine</field>
+        <field name="arch" type="xml">
+            <form string="Biometric Device">
+                <header>
+                    <button name="download_attendance" type="object" string="Download Data" class="oe_highlight"
+                            icon="fa-download " confirm="Are you sure you want to do this?"/>
+                    <button name="test_connection" type="object" string="Test Connection"/>
+                    <button name="download_users" type="object" string="Download Users"/>
+                    <button name="reset_status" type="object" class="oe_highlight" string="Reset Status" groups="base.group_no_one"
+                    help="Reset Status Of Device In Case Error During Download Data"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Machine IP"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="port_no"/>
+                            <field name="pass_word" password="True"/>
+                            <field name="address_id"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Users Setting">
+                            <field name="user" mode="tree,form">
+                                <form string="Biometric Machine Users">
+                                    <sheet>
+                                        <group>
+                                            <field name="device_id"/>
+                                            <field name="attendance_type"/>
+                                            <field name="relate_emp"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                                <tree create="0" delete="0" editable="bottom">
+                                    <field name="name" invisible="1"/>
+                                    <field name="device_id"/>
+                                    <field name="attendance_type"/>
+                                    <field name="relate_emp"/>
+                                    <button name="action_delete_users" type="object"
+                                            class="fa fa-trash-o"
+                                            confirm="Are you delete this record,this may be delete relate user in ZK Device base on your config?"/>
+                                    <!--<field name="has_employee" invisible="1"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Biometric Device Configure">
+                            <group>
+                                <group>
+                                    <field name="time_zone"/>
+                                </group>
+                                <group>
+                                    <field name="auto_create_new_emp"/>
+                                    <field name="auto_clear_log"/>
+                                    <field name="auto_sync_user"/>
+                                    <field name="allow_delete_user"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zk_machine_tree" model="ir.ui.view">
+        <field name="name">zk.machine.tree</field>
+        <field name="model">zk.machine</field>
+        <field name="arch" type="xml">
+            <tree string="Biometric Machine">
+                <field name="name"/>
+                <field name="port_no"/>
+                <field name="address_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+    <record id="zk_machine_action" model="ir.actions.act_window">
+        <field name="name">Biometric Device</field>
+        <field name="res_model">zk.machine</field>
+<!--        <field name="view_type">form</field>-->
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="zk_machine_users_action" model="ir.actions.act_window">
+        <field name="name">Device Users</field>
+        <field name="res_model">zk.users</field>
+<!--        <field name="view_type">form</field>-->
+        <field name="context">{'create': False}</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="zk_machine_users_tree" model="ir.ui.view">
+        <field name="name">device.user.tree</field>
+        <field name="model">zk.users</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="device_id"/>
+                <field name="zk_id"/>
+                <field name="relate_emp"/>
+            </tree>
+        </field>
+    </record>
+    <record id="zk_machine_users_form" model="ir.ui.view">
+        <field name="name">device.user.form</field>
+        <field name="model">zk.users</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="device_id"/>
+                        <field name="zk_id" readonly="1"/>
+                        <field name="relate_emp"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="zk_machine_users_search" model="ir.ui.view">
+        <field name="name">device.user.search</field>
+        <field name="model">zk.users</field>
+        <field name="arch" type="xml">
+            <search string="Users">
+                <field name="device_id"/>
+                <field name="relate_emp"/>
+                <filter name="check_users" string="Has Employee" domain="[('relate_emp','!=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="hr_employee_inherit_form_view" model="ir.ui.view">
+        <field name="name">hr.employee.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="device_id"/>
+                <field name="zk_id"/>
+                <field name="attendance_by_time_sheet"/>
+            </field>
+        </field>
+    </record>
+
+    <!--Popup Message-->
+    <record id="custom_pop_message_wizard_view_form" model="ir.ui.view">
+        <field name="name">custom.pop.message.form</field>
+        <field name="model">custom.pop.message</field>
+        <field name="arch" type="xml">
+            <form string="Custom POP Message">
+
+                <field name="name" readonly="1"/>
+
+                <footer>
+                    <button string="OK" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!--Mass update employee biometric device transient model-->
+    <record model="ir.ui.view" id="wizard_form_view">
+        <field name="name">wizard.form</field>
+        <field name="model">mass.update.zk</field>
+        <field name="arch" type="xml">
+            <form string="update">
+                <group>
+                    <field name="location"/>
+                    <field name="zk_id"/>
+                </group>
+                <footer>
+                    <button name="mass_update_zk" string="Done" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window name="# Update Employee Biometric Device"
+                res_model="mass.update.zk"
+                view_mode="form"
+                target="new"
+                id="mass_update_zk_machine"/>
+
+
+    <menuitem id="zk_machine_menu" parent="hr_attendance.menu_hr_attendance_root" sequence="50"
+              name="Biometric Manager" groups="magenest_attendance.group_advanced_import"/>
+    <menuitem id="zk_machine_sub_menu" parent="zk_machine_menu" name="Device Configuration" action="zk_machine_action"
+              sequence="1"/>
+    <menuitem id="zk_machine_users_menu" parent="zk_machine_menu" name="Device Users" action="zk_machine_users_action"
+              sequence="15"/>
+    <menuitem id="zk_machine_mass_update_menu" parent="zk_machine_menu" name="# Update Employee Biometric Device"
+              action="mass_update_zk_machine"
+              sequence="30"/>
+</odoo>
+

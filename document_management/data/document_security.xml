@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="1">
+        <record model="res.groups" id="group_document_base">
+            <field name="name">#1. Document - Base</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+        <record model="res.groups" id="group_document_general">
+            <field name="name">#1. Document - General</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+        <record model="res.groups" id="group_document_general_manager">
+            <field name="name">#1. Document - General - Folder - Manager</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+        <record model="res.groups" id="group_document_general_part_manager">
+            <field name="name">#1. Document - General - Folder - Part - Manager</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+        <record model="res.groups" id="group_document_project">
+            <field name="name">#1. Document - Project</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+        <record model="res.groups" id="group_document_quotation">
+            <field name="name">#1. Document - Quotation</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+        <record model="res.groups" id="group_document_crm">
+            <field name="name">#1. Document - CRM</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+    </data>
+</odoo>
+

@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+
+    <!--<record model="ir.ui.view" id="project_document_field_inherit">-->
+
+    <!--<field name="name">project.document.field.inherit</field>-->
+    <!--<field name="model">project.project</field>-->
+    <!--<field name="inherit_id" ref="project.view_project_kanban"/>-->
+    <!--<field name="arch" type="xml">-->
+    <!--<xpath expr="//div[hasclass('o_project_kanban_boxes')]" position="inside">-->
+    <!--<group>-->
+    <!--<strong>-->
+    <!--<a type="object" name="get_project_document_action_document_part"-->
+    <!--context="{'active_id': active_id}">-->
+    <!--<h1>-->
+    <!--<field name="document_project_name"/>-->
+    <!--</h1>-->
+    <!--</a>-->
+    <!--</strong>-->
+    <!--</group>-->
+    <!--</xpath>-->
+    <!--</field>-->
+    <!--</record>-->
+
+    <record id="project_document_edit_form" model="ir.ui.view">
+        <field name="name">project.document.field.inherit.form</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="document_tab_visible" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='settings']" position="after">
+                <page name="project_document" string="Document"
+                      attrs="{'invisible': [('document_tab_visible', '=', False)] }">
+                    <group class="o_horizontal_separator">
+                        <field name="document_project_name"
+                               class="o_field_char o_field_widget o_input document_project_name"/>
+                        <!--<field name="google_drive_url" widget="url" text="Open Google Drive"/>-->
+                    </group>
+                    <group class="o_group o_inner_group group_document_project_part">
+                        <field name="document_project_part"
+                               attrs="{'invisible' : [('document_project_name','=', False)]}"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="." position="inside">
+                <script type="text/javascript"
+                        src="/document_management/static/src/js/project_document_part_field.js"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="ir_actions_server_document_project_list_special" model="ir.actions.server">
+        <field name="name">valid.document.project.action.server</field>
+        <field name="model_id" ref="model_project_project"/>
+        <!--            <field name="view_type">form</field>-->
+        <!--            <field name="view_mode">form</field>-->
+        <field name="state">code</field>
+        <field name="code">action = model.action_document_project_list()</field>
+    </record>
+    <record id="ir_actions_server_document_project_file_list_special" model="ir.actions.server">
+        <field name="name">valid.document.project.file.action.server</field>
+        <field name="model_id" ref="model_document_project_file"/>
+        <!--            <field name="view_type">form</field>-->
+        <!--            <field name="view_mode">form,tree</field>-->
+        <field name="state">code</field>
+        <field name="code">action = model.action_document_project_file_list()</field>
+    </record>
+    <record id="ir_actions_window_document_project_file_list_special" model="ir.actions.act_window">
+        <field name="name">document project file</field>
+        <field name="res_model">document.project.file</field>
+        <field name="view_mode">kanban,tree,form</field>
+<!--        <field name="view_ids" eval="[(5, 0, 0),-->
+<!--            (0, 0, {'view_mode': 'kanban', 'view_id': ref('general_document_action_document_project_part_file_kanban')}),-->
+<!--            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_document_project_file_tree')}),-->
+<!--            (0, 0, {'view_mode': 'form', 'view_id': ref('view_document_project_file_form')})]"/>-->
+        <field name="context">{"create": False}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a document file
+          </p>
+        </field>
+    </record>
+
+    <record id="view_document_project_kanban" model="ir.ui.view">
+        <field name="name">document.project.kanban</field>
+        <field name="model">project.project</field>
+        <field name="priority">30</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors">
+                <field name="color"/>
+                <field name="is_favorite"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}} o_has_icon">
+                            <div class="o_general_kanban_main">
+                                <div t-attf-class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <a type="object" name="get_project_document_action_document_part"
+                                               context="{'active_id': active_id}">
+                                                <h1>
+                                                    <field name="document_project_name"/>
+                                                </h1>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<field name="google_drive_url" widget="url" text="Open Google Drive"/>-->
+                            </div>
+                            <span class="o_right">
+                                <field name="is_favorite" widget="boolean_favorite" nolabel="1" force_save="1"/>
+                            </span>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_document_project_tree" model="ir.ui.view">
+        <field name="name">Folder</field>
+        <field name="model">project.project</field>
+        <field name="priority">30</field>
+        <field name="arch" type="xml">
+            <tree string="Name">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_document_project_list">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Project Documents</field>
+        <field name="res_model">project.project</field>
+        <!--            <field name="view_type">form</field>-->
+        <field name="view_mode">kanban,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_document_project_part_file_list">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Document Parts</field>
+        <field name="res_model">document.project.part</field>
+        <!--            <field name="view_type">form</field>-->
+        <field name="view_mode">kanban,form</field>
+    </record>
+    <!--view document project part-->
+    <record id="view_document_project_part_file_kanban" model="ir.ui.view">
+        <field name="name">document.project.part.file.kanban</field>
+        <field name="model">document.project.part</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors">
+                <!--                    <field name="is_favorite"/>-->
+                <templates>
+                    <t t-name="kanban-box">
+                        <div>
+                            <div t-attf-class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <a type="object" name="get_project_document_action_document_part_file"
+                                           context="{'active_id': active_id}">
+                                            <h1>
+                                                <field name="name"/>
+                                            </h1>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!--                                    <a name="call_back_parent" string="Open Parent Directory" type="object"-->
+                                <!--                                            class="oe_link float-right"-->
+                                <!--                                            invisible="{'active_id': False}">Back</a>-->
+
+                            </div>
+                            <div class="o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                <field name="current_permission_can_update" invisible="1"/>
+                                <div class="o_kanban_card_manage_section">
+                                    <div role="menuitem"
+                                         attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                        <a type="edit">Edit</a>
+                                    </div>
+                                    <div role="menuitem"
+                                         attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                        <a type="delete">Delete</a>
+                                    </div>
+                                    <div role="menuitem">
+                                        <a name="call_back_parent_root" string="Open Parent Directory" type="object">Open Parent Directory
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="o_kanban_manage_toggle_button o_left" href="#"
+                               attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                            </a>
+                            <!--                                <span class="o_right"><field name="is_favorite" widget="boolean_favorite" nolabel="1" force_save="1" /></span>-->
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="project_document_action_document_part_form" model="ir.ui.view">
+        <field name="name">Documents</field>
+        <field name="model">document.project.part</field>
+        <field name="arch" type="xml">
+            <form string="Name" create="false">
+                <sheet>
+                    <button name="call_back_parent_part" string="Open Parent Directory" type="object"
+                            class="oe_link float-right"
+                            icon="fa-arrow-left"
+                            context="{'active_id': document_project_id}"
+                            invisible="context.get('active_id',False)"
+                            attrs="{'invisible': [('document_project_id','=', False)]}"/>
+
+                    <field name="document_project_id" invisible="1"/>
+                    <group>
+                        <field name="name"/>
+                        <!--<field name="google_drive_url" widget="url"/>-->
+                    </group>
+                    <group>
+                        <field name="write_users"/>
+                    </group>
+                    <group>
+                        <field name="read_users"/>
+                    </group>
+                    <group>
+                        <h4>Note: Only manager of this project can create this folder</h4>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_setting_document_project_part_tree" model="ir.ui.view">
+        <field name="name">Project Folder Parts</field>
+        <field name="model">document.project.part</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <!--<field name="google_drive_url" widget="url"/>-->
+            </tree>
+        </field>
+    </record>
+
+
+    <menuitem id="document_menu_project" name="Project" parent="root_document_menu" sequence="2"
+              groups="group_document_project"/>
+
+    <menuitem id="document_menu_project_folder_explorer" name="Folder Explorer" parent="document_menu_project"
+              sequence="1"
+              action="ir_actions_server_document_project_list_special" groups="group_document_project"/>
+    <menuitem id="document_menu_project_file_explorer" name="File Explorer" parent="document_menu_project"
+              sequence="2"
+              action="ir_actions_server_document_project_file_list_special" groups="group_document_project"/>
+
+
+    <!--<menuitem id="pro_menu" name="Project Document" parent="root_document_menu" action="project_document_menu" sequence="10"/>-->
+    <!--additional search-->
+    <record id="project_project_view_search_document" model="ir.ui.view">
+        <field name="name">project.project.search.inherit.document</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_project_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="document_project_name"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--project document button-->
+    <record id="project_project_document_button_edit_view" model="ir.ui.view">
+        <field name="name">project.project.edit.button.inherit.document</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='attachment_tree_view']" position="before">
+                <button class="oe_stat_button" name="action_document_project_part_list" type="object"
+                        icon="fa-files-o" attrs="{'invisible': [('document_count', '=', 0)]}">
+                    <field string="GGDrive Doc" name="document_count" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+    <record id="project_project_document_button" model="ir.ui.view">
+        <field name="name">project.project.button.inherit.document</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_kanban"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@class='o_project_kanban_boxes']" position="inside">
+                <div>
+                    <div>
+
+                        <field name="document_project_name" invisible="1"/>
+                    </div>
+                    <div>
+
+                        <a type="object" name="action_document_project_part_list"
+                           attrs="{'invisible': [('document_project_name', '=', False)]}">Document
+                        </a>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!--project task document button-->
+    <record id="project_task_document_button_edit_view" model="ir.ui.view">
+        <field name="name">project.task.edit.button.inherit.document</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//button[@name='action_open_parent_task']" position="before">
+                <button class="oe_stat_button" name="action_document_project_part_list" type="object"
+                        icon="fa-files-o" attrs="{'invisible': [('document_count', '=', 0)]}">
+                    <field string="GGDrive Doc" name="document_count" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+    <!--        <record id="project_task_document_button" model="ir.ui.view">-->
+    <!--            <field name="name">project.task.button.inherit.document</field>-->
+    <!--            <field name="model">project.task</field>-->
+    <!--            <field name="inherit_id" ref="project.view_task_kanban"/>-->
+    <!--            <field name="arch" type="xml">-->
+
+    <!--                <xpath expr="//div[@class='oe_kanban_bottom_left']" position="after">-->
+    <!--                    <div>-->
+    <!--                        <div>-->
+    <!--                            <field name="document_count" invisible="1"/>-->
+    <!--                            <a type="object" name="action_document_project_part_list"-->
+    <!--                               attrs="{'invisible': [('document_count', '=', 0)]}">-->
+    <!--                                <small>Document</small>-->
+    <!--                            </a>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </xpath>-->
+    <!--            </field>-->
+    <!--        </record>-->
+
+
+</odoo>
+

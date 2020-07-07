@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_over_time_tree" model="ir.ui.view">
+        <field name="name">employee.overtime.tree</field>
+        <field name="model">employee.overtime</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Over Time">
+                <field name="employee_id"/>
+                <field name="assign_to"/>
+                <field name="department"/>
+                <field name="type"/>
+                <field name="check_in_date"/>
+                <field name="duration"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_employee_over_time_search_view" model="ir.ui.view">
+        <field name="name">employee.overtime.search</field>
+        <field name="model">employee.overtime</field>
+        <field name="arch" type="xml">
+            <search string="Over Time Search">
+                <field name="employee_id"/>
+                <group expand="1" string="Group By">
+                    <separator/>
+                    <filter name="check_in_date" string="Date" context="{'group_by':'check_in_date:day'}"/>
+                </group>
+                <group expand="1" string="Group By">
+                    <filter name="employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                </group>
+                <group expand="1" string="Group By">
+                    <filter name="type" string="Type" context="{'group_by':'type'}"/>
+                </group>
+                <group expand="1" string="Group By">
+                    <filter name="department" string="Department" context="{'group_by':'department'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="view_employee_over_time_form" model="ir.ui.view">
+        <field name="name">employee.overtime.form</field>
+        <field name="model">employee.overtime</field>
+        <field name="arch" type="xml">
+            <form string="Employee Over Time">
+                <sheet>
+                    <group>
+                        <field name="assign_to" invisible="1"/>
+                        <field name="department" invisible="1"/>
+                        <field name="employee_available" invisible="1"/>
+                        <field name="type"/>
+                        <field name="employee_id" domain='[("id", "in", employee_available)]'
+                               options="{'no_create': True, 'no_open': True}">
+                            <!--                            <tree create="0">-->
+                            <!--                                <field name="name"/>-->
+                            <!--                            </tree>-->
+                        </field>
+                        <!--                        <field name="check_in_date" options="{'datepicker':{'disable_past_date': True}}"/>-->
+                        <field name="check_in_date"/>
+                        <field name="duration"/>
+                        <field name="description" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_employee_over_time_calendar" model="ir.ui.view">
+        <field name="name">employee.overtime.calendar.view</field>
+        <field name="model">employee.overtime</field>
+        <field name="priority" eval="30"/>
+        <field name="arch" type="xml">
+            <calendar string="OverTime" mode="month" date_start="check_in_date" hide_time="true" quick_add="False" color="employee_id">
+                <field name="description"/>
+                <field name="duration"/>
+                <field name="employee_id" avatar_field="image_128"/>
+            </calendar>
+        </field>
+    </record>
+    <record id="add_overtime_employee_view" model="ir.ui.view">
+        <field name="name">add_overtime_employee_view</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='can_read_leave_users']" position="after">
+                <field name="can_add_overtime_users" string="Employees That You Can Add Overtime"
+                       groups="hr.group_hr_manager">
+                    <tree>
+                        <field name="name"/>
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

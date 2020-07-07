@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <!--Action-->
+        <record id="ir_actions_server_document_general_list_special" model="ir.actions.server">
+            <field name="name">valid.document.general.action.server</field>
+            <field name="model_id" ref="model_document_general"/>
+            <field name="state">code</field>
+            <field name="code">action = model.action_document_general_list()</field>
+        </record>
+        <record id="ir_actions_server_document_general_file_list_special" model="ir.actions.server">
+            <field name="name">valid.document.general.file.action.server</field>
+            <field name="model_id" ref="model_document_general_file"/>
+            <field name="state">code</field>
+            <field name="code">action = model.action_document_general_file_list()</field>
+        </record>
+
+        <record id="view_document_general_kanban" model="ir.ui.view">
+            <field name="name">document.general.kanban</field>
+            <field name="model">document.general</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors" import="false">
+                    <field name="color"/>
+                    <field name="is_favorite"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}} o_has_icon">
+                                <div class="o_general_kanban_main">
+                                    <div t-attf-class="o_kanban_card_header">
+                                        <div class="o_kanban_card_header_title">
+                                            <div class="o_primary">
+                                                <a type="object" name="get_general_document_action_document_part" context="{'active_id': active_id}">
+                                                    <h1>
+                                                        <field name="name"/>
+                                                    </h1>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<div class="container o_kanban_card_content">-->
+                                    <!--<field name="google_drive_url" widget="url" text="Open Google Drive"/>-->
+                                    <!--</div>-->
+                                    <div class="o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                        <field name="current_permission_can_update" invisible="1"/>
+                                        <div class="o_kanban_card_manage_section">
+                                            <div role="menuitem"
+                                                 attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                                <a type="edit">Edit</a>
+                                            </div>
+                                            <div role="menuitem"
+                                                 attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                                <a type="delete">Delete</a>
+                                            </div>
+                                        </div>
+                                        <div role="menuitem" aria-haspopup="true"
+                                             attrs="{'invisible': [('current_permission_can_update', '=', False)]}"
+                                             class="o_no_padding_kanban_colorpicker">
+                                            <ul class="oe_kanban_colorpicker" data-field="color" role="popup"/>
+                                        </div>
+                                    </div>
+                                    <a class="o_kanban_manage_toggle_button o_left" href="#"
+                                       attrs="{'invisible': [('current_permission_can_update', '=', False)]}">
+                                        <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                    </a>
+                                    <span class="o_right">
+                                        <field name="is_favorite" widget="boolean_favorite" nolabel="1" force_save="1"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_document_general_tree" model="ir.ui.view">
+            <field name="name">Folder</field>
+            <field name="model">document.general</field>
+            <field name="arch" type="xml">
+                <tree string="Name">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_document_general_form" model="ir.ui.view">
+            <field name="name">Document</field>
+            <field name="model">document.general</field>
+            <field name="arch" type="xml">
+                <form string="Name">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <!--<field name="google_drive_url" widget="url"/>-->
+                        </group>
+                        <group>
+                            <field name="part_ids"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <!--Action View General-->
+        <record model="ir.actions.act_window" id="action_document_general_list">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">General Documents</field>
+            <field name="res_model">document.general</field>
+<!--            <field name="view_type">form</field>-->
+            <field name="view_mode">kanban,form</field>
+        </record>
+        <!--        add fitler document general-->
+        <record id="document_general_search" model="ir.ui.view">
+            <field name="name">Documents - Search</field>
+            <field name="model">document.general</field>
+            <field name="arch" type="xml">
+                <search string="Documents Search">
+                    <field name="name"/>
+                    <!--                   <filter name="name" string="Name"/>-->
+                    <filter name="my_favorites" string="My Favorites" domain="[('favorite_user_ids', 'in', uid)]"/>
+                    <separator/>
+                </search>
+            </field>
+        </record>
+
+        <!--View for general document part-->
+        <!--<record id="general_document_action_document_part_kanban" model="ir.ui.view">-->
+        <!--<field name="name">Documents</field>-->
+        <!--<field name="model">document.general.part</field>-->
+        <!--<field name="arch" type="xml">-->
+        <!--<kanban>-->
+        <!--<field name="name"/>-->
+        <!--<templates>-->
+        <!--<t t-name="kanban-box">-->
+        <!--<div>-->
+        <!--<div t-attf-class="o_kanban_card_header">-->
+        <!--<div class="o_kanban_card_header_title">-->
+        <!--<div class="o_primary">-->
+        <!--<strong>-->
+        <!--<field name="name"/>-->
+        <!--</strong>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="container o_kanban_card_content">-->
+        <!--<div class="row">-->
+        <!--<field name="google_drive_url" widget="url"/>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</t>-->
+        <!--</templates>-->
+        <!--</kanban>-->
+        <!--</field>-->
+        <!--</record>-->
+        <record model="ir.actions.act_window" id="action_document_general_part_list">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Document Parts</field>
+            <field name="res_model">document.general.part</field>
+<!--            <field name="view_type">form</field>-->
+            <field name="view_mode">kanban,form</field>
+        </record>
+        <record id="view_document_general_file_kanban" model="ir.ui.view">
+            <field name="name">document.general.file.kanban</field>
+            <field name="model">document.general.part</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors">
+                    <field name="name"/>
+                    <field name="color"/>
+                    <!--                    <field name="is_favorite"/>-->
+                    <templates>
+                        <t t-name="kanban-box">
+<!--                            <div t-attf-class="oe_kanban_global_click">-->
+                                <div class="o_general_part_kanban_main">
+                                    <div t-attf-class="o_kanban_card_header">
+                                        <div class="o_kanban_card_header_title">
+                                            <div class="o_primary">
+                                                <a type="object" name="get_general_document_action_document_part_file"
+                                                   context="{'active_id': active_id}">
+                                                    <h1>
+                                                        <field name="name"/>
+                                                    </h1>
+                                                </a>
+                                            </div>
+                                            <!--                                        <div>-->
+                                            <!--                                            <a name="call_back_parent_root" string="Open Parent Directory"-->
+                                            <!--                                               type="object" class="float-right"-->
+                                            <!--                                                >Open Parent Directory-->
+                                            <!--                                            </a>-->
+                                            <!--                                        </div>-->
+                                        </div>
+                                    </div>
+                                    <!--                                <div class="o_kanban_card_manage_pane dropdown-menu" role="menu">-->
+                                    <!--                                    <div class="o_kanban_card_manage_section">-->
+                                    <!--                                        <div role="menuitem">-->
+                                    <!--                                            <a name="call_back_parent_root" string="Open Parent Directory"-->
+                                    <!--                                               type="object">Open Parent Directory-->
+                                    <!--                                            </a>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
+                                </div>
+<!--                            </div>-->
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record id="general_document_action_document_part_form" model="ir.ui.view">
+            <field name="name">Documents</field>
+            <field name="model">document.general.part</field>
+            <field name="arch" type="xml">
+                <form string="Name">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <!--<field name="google_drive_url" widget="url"/>-->
+                        </group>
+                        <group>
+                            <field name="write_users"/>
+                        </group>
+                        <group>
+                            <field name="read_groups"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_setting_document_general_part_tree" model="ir.ui.view">
+            <field name="name">General Folder Parts</field>
+            <field name="model">document.general.part</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <!--<field name="google_drive_url" widget="url"/>-->
+                </tree>
+            </field>
+        </record>
+        <!--Menu-->
+        <menuitem id="document_menu_general" name="General" parent="root_document_menu" sequence="1"
+                  groups="group_document_general"/>
+        <menuitem id="document_menu_general_folder_explorer" name="Folder Explorer" parent="document_menu_general"
+                  sequence="1"
+                  action="ir_actions_server_document_general_list_special" groups="group_document_general"/>
+        <menuitem id="document_menu_general_file_explorer" name="File Explorer" parent="document_menu_general"
+                  sequence="2"
+                  action="ir_actions_server_document_general_file_list_special" groups="group_document_general"/>
+        <!--<menuitem id="document_menu_general_file_searching" name="General" parent="root_document_menu" sequence="1"-->
+        <!--action="ir_actions_server_document_general_list_special" groups="group_document_general"/>-->
+        <!--Search View-->
+        <!--<record id="view_readable_document_general_search" model="ir.ui.view">-->
+        <!--<field name="name">document.general.readable.filter</field>-->
+        <!--<field name="model">document.general</field>-->
+        <!--<field name="arch" type="xml">-->
+        <!--<search string="Search Batch Picking">-->
+        <!--<field name="name" string="Batch Picking"/>-->
+        <!--<filter name="in_progress" string="Running" domain="[('state', '=', 'in_progress')]"-->
+        <!--help="Batch Pickings not finished"/>-->
+        <!--<field name="user_id"/>-->
+        <!--<group expand="0" string="Group By">-->
+        <!--<filter string="Responsible" name="user" domain="[]" context="{'group_by': 'user_id'}"/>-->
+        <!--<filter string="State" name="state" domain="[]" context="{'group_by':'state'}"/>-->
+        <!--</group>-->
+        <!--</search>-->
+        <!--</field>-->
+        <!--</record>-->
+
+</odoo>

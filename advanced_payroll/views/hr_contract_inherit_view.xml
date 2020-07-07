@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="hr_salary_rule_form_inherit" model="ir.ui.view">
+            <field name="name">Contract</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='information']/group" position="after">
+                    <group>
+                        <group>
+                            <label for="lunch_allowance"/>
+                            <div class="o_row" name="lunch_allowance">
+                                <field name="lunch_allowance"/>
+                                <span>/ month</span>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <label for="travel_allowance"/>
+                            <div class="o_row" name="travel_allowance">
+                                <field name="travel_allowance"/>
+                                <span>/ month</span>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <label for="telephone_allowance"/>
+                            <div class="o_row" name="telephone_allowance">
+                                <field name="telephone_allowance"/>
+                                <span>/ month</span>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <label for="responsibility_allowance"/>
+                            <div class="o_row" name="responsibility_allowance">
+                                <field name="responsibility_allowance"/>
+                                <span>/ month</span>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <label for="seniority_allowance"/>
+                            <div class="o_row" name="seniority_allowance">
+                                <field name="seniority_allowance"/>
+                                <span>/ month</span>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <label for="house_rent_allowance"/>
+                            <div class="o_row" name="house_rent_allowance">
+                                <field name="house_rent_allowance"/>
+                                <span>/ month</span>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <label for="family_circumtance_deductions"/>
+                            <div class="o_row" name="family_circumtance_deductions">
+                                <field name="family_circumtance_deductions"/>
+                                <span>/ month</span>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <label for="social_insurance"/>
+                            <div class="o_row" name="social_insurance">
+                                <field name="social_insurance"/>
+                            </div>
+                        </group>
+                    </group>
+                </xpath>
+
+                <xpath expr="//field[@name='job_id']" position="after">
+                    <field name="type"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

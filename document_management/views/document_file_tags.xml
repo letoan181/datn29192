@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!--form view external user-->
+    <record model="ir.ui.view" id="document_tags_form_view">
+        <field name="name">Tags</field>
+        <field name="model">document.tags</field>
+        <field name="arch" type="xml">
+            <form string="Tags">
+                <group>
+                    <field name="name"/>
+                    <field name="color"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="document_tags_search_view">
+        <field name="name">Tags</field>
+        <field name="model">document.tags</field>
+        <field name="arch" type="xml">
+            <search string="Issue Version">
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+    <record id="document_tags_action" model="ir.actions.act_window">
+        <field name="name">Tags</field>
+        <field name="res_model">document.tags</field>
+        <!--            <field name="view_type">form</field>-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new tag
+            </p>
+        </field>
+    </record>
+    <!--Setting-->
+    <record id="action_document_configuration" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'document_management'}</field>
+    </record>
+    <menuitem id="menu_document_configure" name="Configuration" parent="root_document_menu" sequence="10" groups="base.group_system"/>
+    <menuitem id="menu_document_setting" parent="menu_document_configure" name="Settings" sequence="1" action="action_document_configuration"/>
+    <menuitem action="document_tags_action" name="Tags" id="menu_project_tags_act" parent="menu_document_configure" sequence="2"/>
+
+    <!--        Mass action update permission part-->
+    <record model="ir.ui.view" id="mass_action_update_permission_form">
+        <field name="name">Mass Update</field>
+        <field name="model">mass.action.update.permission</field>
+        <field name="arch" type="xml">
+            <form string="Update">
+                <group>
+                    <field name="type"/>
+                </group>
+                <footer>
+                    <button name="force_update" type="object"
+                            string="Execute" class="oe_highlight"/>
+                    or
+
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="mass_action_update_document_permission" model="ir.actions.act_window">
+        <field name="name">Update Permission Part</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mass.action.update.permission</field>
+        <field name="view_id" ref="document_management.mass_action_update_permission_form"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="mass_action_update_permission" name="#Mass Update Permission" parent="menu_document_configure"
+              sequence="6" action="mass_action_update_document_permission"/>
+    <!--inherit project file form-->
+    <!--project-->
+    <record id="project_file_tags" model="ir.ui.view">
+        <field name="name">tags.project.file</field>
+        <field name="model">document.project.file</field>
+        <field name="inherit_id" ref="document_management.view_document_project_file_form"/>
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="type"]' position='after'>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="project_file_search_view" model="ir.ui.view">
+        <field name="name">tags.project.file</field>
+        <field name="model">document.project.file</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="tag_ids"/>
+            </search>
+        </field>
+    </record>
+    <!--quotation-->
+    <record id="quotation_file_tags" model="ir.ui.view">
+        <field name="name">tags.quotation.file</field>
+        <field name="model">document.quotation.file</field>
+        <field name="inherit_id" ref="document_management.view_document_quotation_file_form"/>
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="type"]' position='after'>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="quotation_file_search_view" model="ir.ui.view">
+        <field name="name">tags.quotation.file</field>
+        <field name="model">document.quotation.file</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="tag_ids"/>
+            </search>
+        </field>
+    </record>
+    <!--crm-->
+    <record id="crm_file_tags" model="ir.ui.view">
+        <field name="name">tags.crm.file</field>
+        <field name="model">document.crm.file</field>
+        <field name="inherit_id" ref="document_management.view_document_crm_file_form"/>
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="type"]' position='after'>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="crm_file_search_view" model="ir.ui.view">
+        <field name="name">tags.crm.file</field>
+        <field name="model">document.crm.file</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="tag_ids"/>
+            </search>
+        </field>
+    </record>
+    <!--General-->
+    <record id="general_file_tags" model="ir.ui.view">
+        <field name="name">tags.general.file</field>
+        <field name="model">document.general.file</field>
+        <field name="inherit_id" ref="document_management.view_document_general_file_form"/>
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="type"]' position='after'>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="general_file_search_view" model="ir.ui.view">
+        <field name="name">tags.general.file</field>
+        <field name="model">document.general.file</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="tag_ids"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>

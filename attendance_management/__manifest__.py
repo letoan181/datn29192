@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'Magenest Biometric Device Integration',
+    'version': '12.0.1.0.0',
+    'summary': """Integrating Biometric Device With HR Attendance (Face + Thumb)""",
+    'description': 'This module integrates Odoo with the biometric device(Model: ZKteco uFace 202)',
+    'category': 'Generic Modules/Human Resources',
+    'author': 'Magenest Odoo Solution',
+    'company': 'Magenest Techno Solutions VietNam',
+    'website': "https://store.magenest.com/",
+    'depends': ['base_setup', 'hr_attendance','leave_description_permission', 'hr_payroll', 'advanced_payroll', 'company_location', 'employee_time_table'],
+    'data': [
+        'data/groups_data.xml',
+        'data/mass_update_attendance_data.xml',
+        'security/ir.model.access.csv',
+        'views/zk_machine_view.xml',
+        'views/manager_attendance.xml',
+        'views/zk_machine_attendance_view.xml',
+        'views/template/magenest_timekeeping.xml',
+        'views/over_time_view.xml',
+        'views/hr_payroll.xml',
+        'views/attendance_day_off_view.xml',
+    ],
+    'qweb': [
+        "static/src/xml/employee_work_time_info.xml",
+    ],
+    'images': ['/static/description/mm_avatar.png'],
+    'license': 'AGPL-3',
+    'demo': [],
+    'installable': True,
+    'auto_install': False,
+    'application': False,
+}

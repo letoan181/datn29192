@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <!--action addtional edit-->
+        <record id="view_setting_document_file_permission_error_tree" model="ir.ui.view">
+            <field name="name">Document File Permissions - Error</field>
+            <field name="model">document.file.permission.error</field>
+            <field name="arch" type="xml">
+                <tree string="Document File Permission Tree">
+                    <field name="res_user_id"/>
+                    <field name="file_id"/>
+                    <field name="google_drive_permission_id"/>
+                    <field name="type"/>
+                    <field name="status"/>
+                    <field name="error_message"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_document_file_permission_error_form" model="ir.ui.view">
+            <field name="name">Document File Permission Error</field>
+            <field name="model">document.file.permission.error</field>
+            <field name="arch" type="xml">
+                <form string="Document File Permission Error">
+                    <header>
+                        <button name="action_drop_document_file_permission"
+                                string="Drop Document Permission"
+                                type="object"/>
+                        <button name="action_list_permission"
+                                string="List Document Permission"
+                                type="object"/>
+                        <button name="action_detail_permission"
+                                string="Detail Permission"
+                                type="object"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="res_user_id"/>
+                            <field name="file_id"/>
+                            <field name="google_drive_permission_id"/>
+                            <field name="type"/>
+                            <field name="status"/>
+                            <field name="error_message"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+</odoo>
