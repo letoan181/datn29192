@@ -33,3 +33,5 @@ access_external_users,access_external_users,model_external_users_permission,base
 access_external_users_base,access_external_users_base,model_external_users_permission,,1,1,1,1
 
 access_document_tags,access_document_file_tags,model_document_tags,base.group_system,1,1,1,1
+
+access_document_google_account,access_document_google_account,model_document_google_account,base.group_system,1,1,1,1

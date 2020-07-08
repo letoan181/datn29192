@@ -66,6 +66,16 @@ class GoogleDriveHelper:
             self.driver_service_singleton = build('drive', 'v3', credentials=credentials)
         return self.driver_service_singleton
 
+    def create_file(self,folder_name):
+        file_metadata = {
+            'name': folder_name,
+            'writersCanShare': False,
+            'mimeType': 'application/vnd.google-apps.folder'
+        }
+        newFile = self._get_driver_service().files().create(body=file_metadata,
+                                                            fields='id').execute()
+        return newFile
+
     def create_sub_file(self, parent_id, folder_name):
         file_metadata = {
             'name': folder_name,

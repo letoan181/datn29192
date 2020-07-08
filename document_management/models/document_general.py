@@ -83,7 +83,11 @@ class DocumentGeneral(models.Model):
     def create(self, values):
         if self.user_has_groups('document_management.group_document_general_manager'):
             Config = self.env['ir.config_parameter'].sudo()
-            parent_file_url = Config.get_param('document_management.general_folder_base')
+            get_google_account = self.env['document.google.account'].sudo().search([('is_use', '=', True)], limit=1)
+            if get_google_account and get_google_account.general_folder_base:
+                parent_file_url = get_google_account.general_folder_base
+            else:
+                parent_file_url = Config.get_param('document_management.general_folder_base')
             if parent_file_url is not False and len(parent_file_url) > 0:
                 parent_file_url_arr = parent_file_url.split('/')
                 parent_id = parent_file_url_arr[len(parent_file_url_arr) - 1]

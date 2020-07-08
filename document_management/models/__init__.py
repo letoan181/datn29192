@@ -23,3 +23,4 @@ from . import res_groups
 from . import res_users
 from . import res_users_force_update_google_email
 from . import document_mass_copy
+from . import mutiple_account

@@ -44,7 +44,8 @@
         'views/view_setting_document.xml',
         'data/mass_sync_user_permission.xml',
         'views/list_editable_renderer_inherit_templates.xml',
-        'views/document_mass_copy_view.xml'
+        'views/document_mass_copy_view.xml',
+        'views/mutiple_account_gg_drive.xml'
     ],
     'qweb': [
         '/static/src/xml/viewtype_template.xml',

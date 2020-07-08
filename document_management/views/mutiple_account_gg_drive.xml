@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="document_gg_account_action" model="ir.actions.act_window">
+        <field name="name">Google Account Setting</field>
+        <field name="res_model">document.google.account</field>
+        <!--            <field name="view_type">form</field>-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new account
+            </p>
+        </field>
+    </record>
+    <record id="view_document_gg_account_tree" model="ir.ui.view">
+        <field name="name">Google Drive Account</field>
+        <field name="model">document.google.account</field>
+        <field name="priority">30</field>
+        <field name="arch" type="xml">
+            <tree string="Name" decoration-success="is_use==True">
+                <field name="name"/>
+                <field name="author_code"/>
+                <field name="is_use" invisible = "1"/>
+                <button name="active_account" type="object" string="Use this account ?" class="btn btn-secondary" confirm="Do you want use this account to store document ?"
+                attrs="{'invisible': [('is_use', '=', True)]}"/>
+                <button name="disable_account" type="object" string="Disable Account" class="btn btn-secondary" confirm="Do you want disable this account ?"
+                attrs="{'invisible': [('is_use', '=', False)]}"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_document_gg_account_form" model="ir.ui.view">
+        <field name="name">Google Account</field>
+        <field name="model">document.google.account</field>
+        <field name="mode">primary</field>
+        <field name="priority">15</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="confirm_setup_token" type="object" string="Confirm Setup Token" class="btn btn-secondary"/>
+                </header>
+                <group>
+                    <field name="name"/>
+                    <field name="author_code"/>
+                   <field name="is_use" invisible = "1"/>
+                    <field name="refresh_token" attrs="{'invisible': [('is_use', '=', False)]}"/>
+                    <field name="general_folder_base" attrs="{'invisible': [('is_use', '=', False)]}"/>
+                    <field name="project_folder_base" attrs="{'invisible': [('is_use', '=', False)]}"/>
+                </group>
+                <group>
+                    <span>Get an authorization code and set it in the field beside.</span>
+                    <field name="google_drive_uri"
+                           class="fa fa-arrow-right mt-1"
+                           widget="url"
+                           text="Get Authorization Code"
+                           nolabel="1"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    <menuitem action="document_gg_account_action" name="Google Drive Manager" id="menu_google_drive_account" parent="menu_document_configure" sequence="3"/>
+</odoo>
