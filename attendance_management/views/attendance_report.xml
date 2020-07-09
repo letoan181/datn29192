@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_hr_attendance_employee_report" model="ir.actions.act_window">
+        <field name="res_model">hr.attendance.report</field>
+        <field name="name">Attendance</field>
+<!--        <field name="view_type">form</field>-->
+        <field name="view_mode">graph,pivot</field>
+        <!--            <field name="context">{'search_default_year':1}</field>-->
+        <field name="help">This report helps in attendance analysis daily.
+        </field>
+    </record>
+    <menuitem id="menu_action_hr_attendance_employee_report" parent="hr_attendance.menu_hr_attendance_root"
+                  sequence="15"
+                  action="action_hr_attendance_employee_report"
+                  name="Analytics"/>
+</odoo>

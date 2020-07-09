@@ -20,6 +20,7 @@
         'views/over_time_view.xml',
         'views/hr_payroll.xml',
         'views/attendance_day_off_view.xml',
+        'views/attendance_report.xml',
     ],
     'qweb': [
         "static/src/xml/employee_work_time_info.xml",

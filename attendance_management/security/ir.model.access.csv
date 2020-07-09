@@ -16,3 +16,5 @@ access_timekeeping_line,timekeeping.line,model_timekeeping_line,base.group_syste
 access_zk_users,zk.users,model_zk_users,base.group_system,1,1,1,1
 
 access_hr_attendance_daily_report_late,hr.attendance.daily.late,model_hr_attendance_daily_late,base.group_system,1,1,1,1
+
+access_hr_attendance_report,hr_attendance_report,model_hr_attendance_report,base.group_system,1,1,1,1
