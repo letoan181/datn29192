@@ -16,8 +16,8 @@
         https://developers.google.com/drive/api/v3/quickstart/python
         
     """,
-    'author': "Magenest",
-    'website': "https://store.magenest.com/",
+    'author': "Le Duc Toan",
+    'website': "https://store.com/",
     'category': 'Extra Tools',
     'version': '0.1',
     'depends': ['base', 'project', 'sale_management','crm', 'google_drive', 'web','mail'],

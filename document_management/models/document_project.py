@@ -13,6 +13,7 @@ class ProjectDocument(models.Model):
                                             string='Document Part')
     document_tab_visible = fields.Boolean(compute='_document_tab_visible')
     document_count = fields.Integer(compute='_document_count')
+    tag_ids = fields.Many2many('document.tags', string='Tags')
 
     def _document_tab_visible(self):
         self.ensure_one()
@@ -165,6 +166,7 @@ class DocumentProjectPart(models.Model):
                                   string='Read Users', required=True)
     current_permission_can_update = fields.Boolean(compute='_compute_current_permission_can_update', default=False,
                                                    store=False)
+    tag_ids = fields.Many2many('document.tags', string='Tags')
 
     def _compute_current_permission_can_update(self):
         for e in self:

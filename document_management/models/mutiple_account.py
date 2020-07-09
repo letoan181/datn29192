@@ -24,8 +24,9 @@ class DocumentDriveAccount(models.Model):
 
     def active_account(self):
         for record in self:
-            if not self.refresh_token:
+            if not self.author_code:
                 raise UserError(_("Can not use when not have permission.Please get token to access to account drive !"))
+            self.confirm_setup_token()
             google_drive_helper = GoogleDriveHelper()
             if not record.general_folder_base:
                 google_drive_new_folder_general = google_drive_helper.create_file(folder_name='Document General')

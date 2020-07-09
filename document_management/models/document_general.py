@@ -45,6 +45,7 @@ class DocumentGeneral(models.Model):
     color = fields.Integer(string='Color Index')
     current_permission_can_update = fields.Boolean(compute='_compute_current_permission_can_update', default=False,
                                                    store=False)
+    tag_ids = fields.Many2many('document.tags', string='Tags')
 
     def _compute_current_permission_can_update(self):
         for e in self:
@@ -180,6 +181,9 @@ class DocumentGeneralPart(models.Model):
     color = fields.Integer(string='Color Index')
     current_permission_can_update = fields.Boolean(compute='_compute_current_permission_can_update', default=False,
                                                    store=False)
+
+    tag_ids = fields.Many2many('document.tags', string='Tags')
+
 
     def _compute_current_permission_can_update(self):
         for e in self:

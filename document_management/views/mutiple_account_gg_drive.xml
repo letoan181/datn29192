@@ -35,7 +35,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="confirm_setup_token" type="object" string="Confirm Setup Token" class="btn btn-secondary"/>
+                    <button name="active_account" type="object" string="Use this account" class="btn btn-secondary"/>
                 </header>
                 <group>
                     <field name="name"/>

@@ -37,6 +37,8 @@
                     <group class="o_horizontal_separator">
                         <field name="document_project_name"
                                class="o_field_char o_field_widget o_input document_project_name"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+
                         <!--<field name="google_drive_url" widget="url" text="Open Google Drive"/>-->
                     </group>
                     <group class="o_group o_inner_group group_document_project_part">
@@ -108,6 +110,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                                 <!--<field name="google_drive_url" widget="url" text="Open Google Drive"/>-->
                             </div>
                             <span class="o_right">
@@ -167,6 +170,7 @@
                                         </a>
                                     </div>
                                 </div>
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                                 <!--                                    <a name="call_back_parent" string="Open Parent Directory" type="object"-->
                                 <!--                                            class="oe_link float-right"-->
                                 <!--                                            invisible="{'active_id': False}">Back</a>-->
@@ -216,6 +220,7 @@
                     <field name="document_project_id" invisible="1"/>
                     <group>
                         <field name="name"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <!--<field name="google_drive_url" widget="url"/>-->
                     </group>
                     <group>
